@@ -51,6 +51,12 @@ let routes = [
 		component: () => import('../views/RTL.vue'),
 	},
 	{
+		path: '/test',
+		name: 'Test',
+		layout: "dashboard",
+		component: () => import('../views/testPage.vue'),
+	},
+	{
 		path: '/Profile',
 		name: 'Profile',
 		layout: "dashboard",
@@ -80,7 +86,7 @@ function addLayoutToRoute( route, parentLayout = "default" )
 {
 	route.meta = route.meta || {} ;
 	route.meta.layout = route.layout || parentLayout ;
-	
+
 	if( route.children )
 	{
 		route.children = route.children.map( ( childRoute ) => addLayoutToRoute( childRoute, route.meta.layout ) ) ;

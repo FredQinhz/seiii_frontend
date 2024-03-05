@@ -20,11 +20,12 @@ import DashboardLayout from './layouts/Dashboard.vue'
 import DashboardRTLLayout from './layouts/DashboardRTL.vue'
 import router from './router'
 // import './plugins/click-away'
-
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 import './scss/app.scss';
 
 Vue.use(Antd);
-
+Vue.use(Buefy)
 Vue.config.productionTip = false
 
 // Adding template layouts to the vue components.

@@ -13,9 +13,12 @@
     "dev": "npm run serve"
   },
   "dependencies": {
+    "@vue/cli": "^3.0.4",
     "ant-design-vue": "1.7.6",
+    "buefy": "^0.9.28",
     "chart.js": "3.4.1",
     "core-js": "3.15.2",
+    "sass": "^1.71.1",
     "vue": "2.6.14",
     "vue-github-buttons": "^3.1.0",
     "vue-router": "3.5.2"
@@ -24,7 +27,6 @@
     "@vue/cli-plugin-babel": "4.5.13",
     "@vue/cli-plugin-router": "4.5.13",
     "@vue/cli-service": "4.5.13",
-    "node-sass": "6.0.1",
     "sass-loader": "^10",
     "vue-template-compiler": "2.6.14"
   }
