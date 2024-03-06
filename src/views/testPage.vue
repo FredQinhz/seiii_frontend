@@ -14,35 +14,7 @@
  * <TestPage :data="['Angular', 'Angular 2', 'Aurelia', 'Backbone', 'Ember', 'jQuery', 'Meteor', 'Node.js', 'Polymer', 'React', 'RxJS', 'Vue.js']" :name="name" :selected="selected" />
  */
  <script setup>
- import { ref,computed } from 'vue';
- //zimport { ref, computed } from 'vue/composition-api';
- const data = ref([
-  'Angular',
-  'Angular 2',
-  'Aurelia',
-  'Backbone',
-  'Ember',
-  'jQuery',
-  'Meteor',
-  'Node.js',
-  'Polymer',
-  'React',
-  'RxJS',
-  'Vue.js'
-]);
-const name = ref('');
-const selected = ref(null);
  
-const filteredDataArray = computed(() => {
-   return data.value.filter((option) => {
-     return option
-       .toString()
-       .toLowerCase()
-       .indexOf(name.value.toLowerCase()) >= 0
-   })
- });
- 
- export { data, name, selected, filteredDataArray };
  </script>
 <template>
   <section class="section-center">
@@ -52,10 +24,11 @@ const filteredDataArray = computed(() => {
         <b-button label="筛选" type="is-primary" aria-controls="contentIdForA11y1" class="button-margin" rounded
           :aria-expanded="props.open" />
       </template>
+      <!-- 下面是是筛选框的内容 -->
       <div class="notification collapse-content">
         <div class="content">
           <h3>
-            未来在这里加入筛选框:多选框、单选框、输入框等
+            选择或输入你筛选的标准
           </h3>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
@@ -63,6 +36,17 @@ const filteredDataArray = computed(() => {
             <br />
             Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
           </p>
+          <b-field grouped group-multiline>
+            <b-field label="选择数值">
+                <b-numberinput v-model="maxs"></b-numberinput>
+            </b-field>
+            <b-field label="输入内容">
+                <b-input v-model="packs" placeholder="e.g. mdi, fa or other"></b-input>
+            </b-field>
+            <b-field label="输入内容">
+                <b-input v-model="icons"></b-input>
+            </b-field>
+          </b-field>
           <div class="block">
             <b-field label="Rounded">
               <b-select placeholder="Select a character" rounded>
@@ -81,7 +65,7 @@ const filteredDataArray = computed(() => {
     <!-- 如下部分为搜索框 -->
     <div class="search-container">
       <b-field class="autocompleteWidth">
-        <b-autocomplete rounded v-model="name" :data="filteredDataArray" placeholder="e.g. jQuery" icon="magnify"
+        <b-autocomplete rounded v-model="searchName" :data="filteredDataArray" placeholder="e.g. jQuery" icon="magnify"
           clearable class="inputheight" @select="option => selected = option">
 
           <template #empty>No results found</template>
@@ -93,11 +77,11 @@ const filteredDataArray = computed(() => {
 </template>
 
 
-<!-- <script>
+<script>
 export default {
   data() {
     return {
-      data: [
+      searchData: [
         'Angular',
         'Angular 2',
         'Aurelia',
@@ -111,22 +95,26 @@ export default {
         'RxJS',
         'Vue.js'
       ],
-      name: '',
-      selected: null
+      searchName: '',
+      name:'',
+      selected: null,
+      maxs: 5,
+      packs: 'mdi',
+      icons: 'star',
     }
   },
   computed: {
     filteredDataArray() {
-      return this.data.filter((option) => {
+      return this.searchData.filter((option) => {
         return option
           .toString()
           .toLowerCase()
-          .indexOf(this.name.toLowerCase()) >= 0
+          .indexOf(this.searchName.toLowerCase()) >= 0
       })
     }
   }
 }
-</script> -->
+</script>
 
 <style scoped lang="scss">
 .section-center {

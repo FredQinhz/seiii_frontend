@@ -20,13 +20,7 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
 # 软工三大作业日志：前端
-
-说明:main分支是一个早期版本,包含一些可能用到i的组件所以保留.master分支是主要写的分支
-另外主要使用elementUI,如果完成逻辑的前提下,会考虑进行美化
 
 原始侧边栏：
 - 内容管理
@@ -51,7 +45,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - 完成筛选功能
 - 完成搜索功能
 
-
+## 日志
+- 3.5
+完成了模板的重新选择和项目结构的梳理,在导航栏加入了自己的项目,页面中主要完成了筛选按钮:点击后弹出筛选窗口,以及搜索栏:自动补全.现在在做将script>迁移到setup但是由于版本问题未完成
 ## 前后端对接
 
 
