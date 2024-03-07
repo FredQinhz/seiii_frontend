@@ -19,6 +19,7 @@
 <template>
 
   <div>
+<!--    以下section条为搜索栏,包括搜索框,筛选按钮与筛选条件等-->
     <section class="section-center">
       <!-- <p class="content"><b>Selected:</b> {{ selected }}</p> -->
       <b-collapse :open="false" aria-id="contentIdForA11y1">
@@ -27,6 +28,7 @@
                     :aria-expanded="props.open" />
         </template>
         <!-- 下面是是筛选框的内容 -->
+        <!--   TODO:搜索框内部或者右边加个搜索按钮     -->
         <div class="notification collapse-content">
           <div class="content">
             <h3>
@@ -39,6 +41,7 @@
               Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
             </p>
             <b-field grouped group-multiline>
+              <!--   TODO:此处存在样式bug,无法显示数值加减号的样式-->
               <b-field label="选择数值">
                 <b-numberinput v-model="maxs"></b-numberinput>
               </b-field>
@@ -107,24 +110,11 @@
         <!-- <a-button type="primary" shape="circle" icon="search" class="searchbutton" /> -->
       </div>
     </section>
-    <!-- Projects Table -->
-    <a-row :gutter="24" type="flex" class="table-margin">
+<!--    下面是表格所在-->
+    <section>
 
-      <!-- Projects Table Column -->
-      <a-col :span="24" class="mb-24">
+    </section>
 
-        <!-- Projects Table Column -->
-        <CardProjectTable2
-            :data="projectTableData"
-            :columns="projectTableColumns"
-        ></CardProjectTable2>
-        <!-- / Projects Table Column -->
-
-      </a-col>
-      <!-- / Projects Table Column -->
-
-    </a-row>
-    <!-- / Projects Table -->
   </div>
 
 </template>
@@ -137,126 +127,26 @@
 // "Projects" table list of columns and their properties.
 import CardProjectTable2 from '../components/Cards/CardProjectTable2' ;
 // "Projects" table list of columns and their properties.
-const projectTableColumns = [
-  {
-    title: 'COMPANIES',
-    dataIndex: 'company',
-    scopedSlots: { customRender: 'company' },
-    width: 300,
-  },
-  {
-    title: 'BUDGET',
-    dataIndex: 'budget',
-    class: 'font-semibold text-muted',
-  },
-  {
-    title: 'STATUS',
-    dataIndex: 'status',
-    class: 'font-semibold text-muted text-sm',
-  },
-  {
-    title: 'COMPLETION',
-    scopedSlots: { customRender: 'completion' },
-    dataIndex: 'completion',
-  },
-  {
-    title: '',
-    scopedSlots: { customRender: 'editBtn' },
-    width: 50,
-  },
-];
-// "Projects" table list of rows and their properties.
-const projectTableData = [
-  {
-    key: '1',
-    company: {
-      name: 'Spotify Version',
-      logo: 'images/logos/logo-spotify.svg',
-    },
-    status: "working",
-    budget: '$14,000',
-    completion: 60,
-  },
-  {
-    key: '2',
-    company: {
-      name: 'Progress Track',
-      logo: 'images/logos/logo-atlassian.svg',
-    },
-    status: "working",
-    budget: '$3,000',
-    completion: 10,
-  },
-  {
-    key: '3',
-    company: {
-      name: 'Jira Platform Errors',
-      logo: 'images/logos/logo-slack.svg',
-    },
-    status: "done",
-    budget: 'Not Set',
-    completion: {
-      status: 'success',
-      value: 100,
-    },
-  },
-  {
-    key: '4',
-    company: {
-      name: 'Launch new Mobile App',
-      logo: 'images/logos/logo-spotify.svg',
-    },
-    status: "canceled",
-    budget: '$20,600',
-    completion: {
-      status: 'exception',
-      value: 50,
-    },
-  },
-  {
-    key: '5',
-    company: {
-      name: 'Web Dev',
-      logo: 'images/logos/logo-webdev.svg',
-    },
-    status: "working",
-    budget: '$4,000',
-    completion: 80,
-  },
-  {
-    key: '6',
-    company: {
-      name: 'Redesign Online Store',
-      logo: 'images/logos/logo-invision.svg',
-    },
-    status: "canceled",
-    budget: '$2,000',
-    completion: {
-      status: 'exception',
-      value: 0,
-    },
-  },
-];
+
+const searchData = [
+  'Angular',
+  'Angular 2',
+  'Aurelia',
+  'Backbone',
+  'Ember',
+  'jQuery',
+  'Meteor',
+  'Node.js',
+  'Polymer',
+  'React',
+  'RxJS',
+  'Vue.js'
+]
+// const tableData = require('@/data/sample.json')
 export default {
-  components: {
-    CardProjectTable2,
-  },
   data() {
     return {
-      searchData: [
-        'Angular',
-        'Angular 2',
-        'Aurelia',
-        'Backbone',
-        'Ember',
-        'jQuery',
-        'Meteor',
-        'Node.js',
-        'Polymer',
-        'React',
-        'RxJS',
-        'Vue.js'
-      ],
+      searchData,
       searchName: '',
       name:'',
       selected: null,
@@ -268,40 +158,6 @@ export default {
       texts: ['Points', 'Total reviews'],
       score: false,
       checkboxGroup: ['Flint'],
-      projectTableColumns,
-      projectTableData,
-      data: [
-        { 'id': 1, 'first_name': 'Jesse', 'last_name': 'Simmons', 'date': '2016-10-15 13:43:27', 'gender': 'Male' },
-        { 'id': 2, 'first_name': 'John', 'last_name': 'Jacobs', 'date': '2016-12-15 06:00:53', 'gender': 'Male' },
-        { 'id': 3, 'first_name': 'Tina', 'last_name': 'Gilbert', 'date': '2016-04-26 06:26:28', 'gender': 'Female' },
-        { 'id': 4, 'first_name': 'Clarence', 'last_name': 'Flores', 'date': '2016-04-10 10:28:46', 'gender': 'Male' },
-        { 'id': 5, 'first_name': 'Anne', 'last_name': 'Lee', 'date': '2016-12-06 14:38:38', 'gender': 'Female' }
-      ],
-      columns: [
-        {
-          field: 'id',
-          label: 'ID',
-          width: '40',
-          numeric: true
-        },
-        {
-          field: 'first_name',
-          label: 'First Name',
-        },
-        {
-          field: 'last_name',
-          label: 'Last Name',
-        },
-        {
-          field: 'date',
-          label: 'Date',
-          centered: true
-        },
-        {
-          field: 'gender',
-          label: 'Gender',
-        }
-      ],
     }
   },
   computed: {

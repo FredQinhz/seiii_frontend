@@ -12,7 +12,7 @@ let routes = [
 	{
 		path: '/',
 		name: 'Home',
-		redirect: '/dashboard',
+		redirect: '/home',
 	},
 	{
 		path: '/dashboard',
@@ -51,10 +51,10 @@ let routes = [
 		component: () => import('../views/RTL.vue'),
 	},
 	{
-		path: '/test',
-		name: 'Test',
+		path: '/home',
+		name: 'Home',
 		layout: "dashboard",
-		component: () => import('../views/testPage.vue'),
+		component: () => import('../views/home.vue'),
 	},
 	{
 		path: '/Profile',

@@ -18,6 +18,16 @@
 
 			<!-- Sidebar Navigation Menu -->
 			<a-menu theme="light" mode="inline">
+        <a-menu-item>
+          <router-link to="/home">
+						<span class="icon">
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M3 6C3 4.34315 4.34315 3 6 3H16C16.3788 3 16.725 3.214 16.8944 3.55279C17.0638 3.89157 17.0273 4.29698 16.8 4.6L14.25 8L16.8 11.4C17.0273 11.703 17.0638 12.1084 16.8944 12.4472C16.725 12.786 16.3788 13 16 13H6C5.44772 13 5 13.4477 5 14V17C5 17.5523 4.55228 18 4 18C3.44772 18 3 17.5523 3 17V6Z" fill="#111827"/>
+							</svg>
+						</span>
+            <span class="label">home</span>
+          </router-link>
+        </a-menu-item>
 				<a-menu-item>
 					<router-link to="/dashboard">
 						<span class="icon">
@@ -53,16 +63,6 @@
 					</router-link>
 				</a-menu-item>
 				<a-menu-item>
-					<router-link to="/test">
-						<span class="icon">
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M3 6C3 4.34315 4.34315 3 6 3H16C16.3788 3 16.725 3.214 16.8944 3.55279C17.0638 3.89157 17.0273 4.29698 16.8 4.6L14.25 8L16.8 11.4C17.0273 11.703 17.0638 12.1084 16.8944 12.4472C16.725 12.786 16.3788 13 16 13H6C5.44772 13 5 13.4477 5 14V17C5 17.5523 4.55228 18 4 18C3.44772 18 3 17.5523 3 17V6Z" fill="#111827"/>
-							</svg>
-						</span>
-						<span class="label">home</span>
-					</router-link>
-				</a-menu-item>
-				<a-menu-item>
 					<router-link to="/rtl">
 						<span class="icon">
 							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,38 +85,38 @@
 						<span class="label">Profile</span>
 					</router-link>
 				</a-menu-item>
-				<a-menu-item>
-					<router-link to="/sign-in">
-						<span class="icon">
-							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z" fill="#111827"/>
-							</svg>
-						</span>
-						<span class="label">Sign In</span>
-					</router-link>
-				</a-menu-item>
-				<a-menu-item>
-					<router-link to="/sign-up">
-						<span class="icon">
-							<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-								<title>duplicate</title>
-								<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-									<g id="Tables" transform="translate(-58.000000, -507.000000)" fill="#BFBFBF" fill-rule="nonzero">
-										<g id="sidebar" transform="translate(33.000000, 43.000000)">
-											<g id="sign-up" transform="translate(16.000000, 455.000000)">
-												<g id="duplicate" transform="translate(9.000000, 9.000000)">
-													<path d="M4,6 C4,4.89543 4.89543,4 6,4 L12,4 C13.1046,4 14,4.89543 14,6 L14,12 C14,13.1046 13.1046,14 12,14 L6,14 C4.89543,14 4,13.1046 4,12 L4,6 Z" id="Path"></path>
-													<path d="M2,0 C0.89543,0 0,0.89543 0,2 L0,8 C0,9.1046 0.89543,10 2,10 L2,4 C2,2.8954305 2.8954305,2 4,2 L10,2 L10,2 C10,0.89543 9.1046,0 8,0 L2,0 Z" id="Path"></path>
-												</g>
-											</g>
-										</g>
-									</g>
-								</g>
-							</svg>
-						</span>
-						<span class="label">Sign Up</span>
-					</router-link>
-				</a-menu-item>
+<!--				<a-menu-item>-->
+<!--					<router-link to="/sign-in">-->
+<!--						<span class="icon">-->
+<!--							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--								<path fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z" fill="#111827"/>-->
+<!--							</svg>-->
+<!--						</span>-->
+<!--						<span class="label">Sign In</span>-->
+<!--					</router-link>-->
+<!--				</a-menu-item>-->
+<!--				<a-menu-item>-->
+<!--					<router-link to="/sign-up">-->
+<!--						<span class="icon">-->
+<!--							<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
+<!--								<title>duplicate</title>-->
+<!--								<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">-->
+<!--									<g id="Tables" transform="translate(-58.000000, -507.000000)" fill="#BFBFBF" fill-rule="nonzero">-->
+<!--										<g id="sidebar" transform="translate(33.000000, 43.000000)">-->
+<!--											<g id="sign-up" transform="translate(16.000000, 455.000000)">-->
+<!--												<g id="duplicate" transform="translate(9.000000, 9.000000)">-->
+<!--													<path d="M4,6 C4,4.89543 4.89543,4 6,4 L12,4 C13.1046,4 14,4.89543 14,6 L14,12 C14,13.1046 13.1046,14 12,14 L6,14 C4.89543,14 4,13.1046 4,12 L4,6 Z" id="Path"></path>-->
+<!--													<path d="M2,0 C0.89543,0 0,0.89543 0,2 L0,8 C0,9.1046 0.89543,10 2,10 L2,4 C2,2.8954305 2.8954305,2 4,2 L10,2 L10,2 C10,0.89543 9.1046,0 8,0 L2,0 Z" id="Path"></path>-->
+<!--												</g>-->
+<!--											</g>-->
+<!--										</g>-->
+<!--									</g>-->
+<!--								</g>-->
+<!--							</svg>-->
+<!--						</span>-->
+<!--						<span class="label">Sign Up</span>-->
+<!--					</router-link>-->
+<!--				</a-menu-item>-->
 			</a-menu>
 			<!-- / Sidebar Navigation Menu -->
 
