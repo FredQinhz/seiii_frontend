@@ -110,9 +110,87 @@
         <!-- <a-button type="primary" shape="circle" icon="search" class="searchbutton" /> -->
       </div>
     </section>
-<!--    下面是表格所在-->
-    <section>
 
+<!--    下面是表格所在-->
+<!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
+
+    <section class="table-width">
+      <b-table
+          :data="tableData"
+          ref="table"
+          paginated
+          per-page="10"
+          :opened-detailed="defaultOpenedDetails"
+          detailed
+          detail-key="id"
+          :detail-transition="transitionName"
+          :show-detail-icon="showDetailIcon"
+          aria-next-label="Next page"
+          aria-previous-label="Previous page"
+          aria-page-label="Page"
+          aria-current-label="Current page">
+
+        <!--  下面是图表项      -->
+        <b-table-column field="id" label="ID" width="40" numeric v-slot="props">
+          {{ props.row.id }}
+        </b-table-column>
+
+        <b-table-column field="user.first_name" label="First Name" sortable v-slot="props">
+          <a @click="props.toggleDetails(props.row)">
+            {{ props.row.user.first_name }}
+          </a>
+        </b-table-column>
+
+        <b-table-column field="user.last_name" label="Last Name" sortable v-slot="props">
+          {{ props.row.user.last_name }}
+        </b-table-column>
+
+        <b-table-column field="date" label="Date" sortable centered v-slot="props">
+                <span class="tag is-success">
+                    {{ new Date(props.row.date).toLocaleDateString() }}
+                </span>
+        </b-table-column>
+
+        <b-table-column label="Gender" v-slot="props">
+                <span>
+                    <b-icon pack="fas"
+                            :icon="props.row.gender === 'Male' ? 'mars' : 'venus'">
+                    </b-icon>
+                    {{ props.row.gender }}
+                </span>
+        </b-table-column>
+
+        <b-table-column v-slot="props">
+          <b-icon icon="pencil" @click="editItem(props.row.id)"></b-icon>
+        </b-table-column>
+
+        <b-table-column v-slot="props">
+          <b-icon icon="delete" @click="deleteItem(props.row.id)"></b-icon>
+        </b-table-column>
+
+        <template #detail="props">
+          <article class="media">
+            <figure class="media-left">
+              <p class="image is-64x64">
+                <img src="/images/face-5.jpg">
+              </p>
+            </figure>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>{{ props.row.user.first_name }} {{ props.row.user.last_name }}</strong>
+                  <small>@{{ props.row.user.first_name }}</small>
+                  <small>31m</small>
+                  <br>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
+                  Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                </p>
+              </div>
+            </div>
+          </article>
+        </template>
+      </b-table>
     </section>
 
   </div>
@@ -121,12 +199,6 @@
 
 
 <script>
-// "Authors" table component.
-// import CardAuthorTable from '../components/Cards/CardAuthorTable' ;
-// "Projects" table component.
-// "Projects" table list of columns and their properties.
-import CardProjectTable2 from '../components/Cards/CardProjectTable2' ;
-// "Projects" table list of columns and their properties.
 
 const searchData = [
   'Angular',
@@ -142,11 +214,70 @@ const searchData = [
   'RxJS',
   'Vue.js'
 ]
+//表格数据:包括id,用户信息,日期,性别
+const tableData = [
+  {
+    id: 1,
+    user: {
+      first_name: 'John',
+      last_name: 'Doe',
+    },
+    date: '2019-9-8',
+    gender:'Male'
+  },
+  {
+    id: 2,
+    user: {
+      first_name: 'Sam',
+      last_name: 'Smith',
+    },
+    date: '2019-9-8',
+    gender: 'Male'
+  },
+  {
+    id: 3,
+    user: {
+      first_name: 'Charlie',
+      last_name: 'Brown',
+    },
+    date: '2019-11-8',
+    gender: 'Female'
+  },
+  {
+    id: 4,
+    user: {
+      first_name: 'Diana',
+      last_name: 'Ross',
+    },
+    date: '2023-3-11',
+    gender: 'Male'
+  },
+  {
+    id: 5,
+    user: {
+      first_name: 'Judy',
+      last_name: 'Collins',
+    },
+    date: '2011-1-1',
+    gender: 'Female'
+  },
+  {
+    id: 6,
+    user: {
+      first_name: 'Michael',
+      last_name: 'Jackson',
+    },
+    date: '2000-1-1',
+    gender: 'Male'
+  },
+]
+
 // const tableData = require('@/data/sample.json')
 export default {
   data() {
     return {
       searchData,
+      tableData,
       searchName: '',
       name:'',
       selected: null,
@@ -158,6 +289,9 @@ export default {
       texts: ['Points', 'Total reviews'],
       score: false,
       checkboxGroup: ['Flint'],
+      defaultOpenedDetails: [1],
+      showDetailIcon: true,
+      useTransition: false
     }
   },
   computed: {
@@ -168,6 +302,19 @@ export default {
           .toLowerCase()
           .indexOf(this.searchName.toLowerCase()) >= 0
       })
+    },
+    transitionName() {
+      if (this.useTransition) {
+        return 'fade'
+      }
+    }
+  },
+  methods: {
+    editItem(id) {
+      this.$buefy.toast.open(`Edit item ${id}`)
+    },
+    deleteItem(id) {
+      this.$buefy.toast.open(`Delete item ${id}`)
     }
   }
 }
@@ -213,5 +360,11 @@ export default {
 .table-margin {
   margin-top: 20px;
   /* 调整这个值来改变表格上边的外边距 */
+}
+.table-width {
+  width: 70%;
+  /* 调整这个值来改变表格的宽度 */
+  margin: auto;
+  margin-top: 20px;
 }
 </style>

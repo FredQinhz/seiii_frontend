@@ -8,7 +8,7 @@ Copyright 2021 Creative Tim (https://www.creative-tim.com)
 Coded by Creative Tim
 
 =========================================================
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
 import Vue from 'vue'
@@ -23,9 +23,16 @@ import router from './router'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import './scss/app.scss';
+import '@mdi/font/css/materialdesignicons.css';
+
+// Vue.component('vue-fontawesome', FontAwesomeIcon);
+
+Vue.use(Buefy,{
+    defaultIconPack: 'mdi',
+});
 
 Vue.use(Antd);
-Vue.use(Buefy)
+
 Vue.config.productionTip = false
 
 // Adding template layouts to the vue components.

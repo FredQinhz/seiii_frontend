@@ -13,6 +13,9 @@
     "dev": "npm run serve"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@mdi/font": "^7.4.47",
     "@vue/cli": "^3.0.4",
     "ant-design-vue": "1.7.6",
     "buefy": "^0.9.28",
