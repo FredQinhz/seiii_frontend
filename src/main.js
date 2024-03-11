@@ -24,7 +24,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import './scss/app.scss';
 import '@mdi/font/css/materialdesignicons.css';
-
+import './api/mock'
 // Vue.component('vue-fontawesome', FontAwesomeIcon);
 
 Vue.use(Buefy,{
