@@ -15,6 +15,7 @@
  */
  <script setup>
 
+ import {right} from "core-js/internals/array-reduce";
  </script>
 <template>
 
@@ -100,13 +101,20 @@
       <!-- 如下部分为搜索框 -->
       <div class="search-container">
         <b-field class="autocompleteWidth">
-          <b-autocomplete rounded v-model="searchName" :data="filteredDataArray" placeholder="e.g. jQuery" icon="magnify"
-                          clearable class="inputheight" @select="option => selected = option">
+          <b-autocomplete rounded v-model="searchName"
+                          :data="filteredDataArray"
+                          placeholder="e.g. jQuery"
+                          icon="magnify"
+                          clearable class="inputheight"
+                          @select="option => selected = option"
+                          @keydown.enter="performSearch"
+                          ref="autocomplete"
+          >
 
             <template #empty>No results found</template>
           </b-autocomplete>
         </b-field>
-        <!-- <a-button type="primary" shape="circle" icon="search" class="searchbutton" /> -->
+         <a-button type="is-ghost" shape="circle" icon="search" class="searchbutton" @click="performSearch"/>
       </div>
     </section>
 
@@ -114,8 +122,14 @@
 <!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
 
     <section class="table-width">
+      <b-field>
+        <b-button type="is-danger" @click="deleteSelected"
+                  label="删除选中" icon-left="close"
+                  class="delete-selected"
+        ></b-button>
+      </b-field>
       <b-table
-          :data="tableData"
+          :data="fliteredData"
           ref="table"
           paginated
           per-page="10"
@@ -127,7 +141,13 @@
           aria-next-label="Next page"
           aria-previous-label="Previous page"
           aria-page-label="Page"
-          aria-current-label="Current page">
+          aria-current-label="Current page"
+          checkable
+          :checkbox-position="'right'"
+          checked-rows.sync="checkedRows"
+          checkbox-type="is-danger"
+          hoverable
+      >
 
         <!--  下面是图表项      -->
         <b-table-column field="id" label="ID" width="40" numeric v-slot="props">
@@ -206,7 +226,7 @@ import axios from "axios";
 const searchData = []
 //表格数据:包括id,用户信息,日期,性别
 const tableData =[]
-
+const checkedRows = []
 // const tableData = require('@/data/sample.json')
 export default {
   data() {
@@ -226,7 +246,9 @@ export default {
       checkboxGroup: ['Flint'],
       defaultOpenedDetails: [1],
       showDetailIcon: true,
-      useTransition: false
+      useTransition: false,
+      searchStatus: false,
+      checkedRows
     }
   },
   computed: {
@@ -243,6 +265,21 @@ export default {
         return 'fade'
       }
     },
+    fliteredData() {
+      if(!this.searchStatus) {
+        return this.tableData
+      }
+      if(this.searchName === '') {
+        return this.tableData
+      }
+      const searchTerm = this.searchName.toLowerCase()
+      this.searchStatus = false
+      return this.tableData.filter(item => {
+        return item.title.toLowerCase().includes(searchTerm) ||
+            item.author.toLowerCase().includes(searchTerm) ||
+            item.labels.some(label => label.toLowerCase().includes(searchTerm))
+      })
+    }
   },
   methods: {
     editItem(id) {
@@ -267,11 +304,21 @@ export default {
           })
         }
       })
+    },
+    performSearch() {
+      this.searchStatus = true
+      console.log(this.searchName)
+    },
+    deleteSelected() {
+      console.log(this.checkedRows)
     }
   },
   created() {
     this.getTableData()
     this.getSearchData()
+  },
+  mounted() {
+    this.$refs.autocomplete.focus()
   }
 }
 </script>
@@ -301,6 +348,7 @@ export default {
 
 .searchbutton {
   top: -5px;
+  border: 0px;
 }
 
 .collapse-content {
@@ -326,5 +374,10 @@ export default {
 .tag-spacing{
   margin-right: 5px;
   /* 调整这个值来改变标签之间的间距 */
+}
+.delete-selected{
+  margin-left: 20px;
+  /* 调整这个值来改变删除选中按钮的左边外边距 */
+  margin-bottom: 10px;
 }
 </style>
