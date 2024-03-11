@@ -41,7 +41,6 @@
               Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
             </p>
             <b-field grouped group-multiline>
-              <!--   TODO:此处存在样式bug,无法显示数值加减号的样式-->
               <b-field label="选择数值">
                 <b-numberinput v-model="maxs"></b-numberinput>
               </b-field>
@@ -135,14 +134,14 @@
           {{ props.row.id }}
         </b-table-column>
 
-        <b-table-column field="user.first_name" label="First Name" sortable v-slot="props">
+        <b-table-column field="title" label="Title" sortable v-slot="props">
           <a @click="props.toggleDetails(props.row)">
-            {{ props.row.user.first_name }}
+            {{ props.row.title }}
           </a>
         </b-table-column>
 
-        <b-table-column field="user.last_name" label="Last Name" sortable v-slot="props">
-          {{ props.row.user.last_name }}
+        <b-table-column field="author" label="Author" sortable v-slot="props">
+          {{ props.row.author }}
         </b-table-column>
 
         <b-table-column field="date" label="Date" sortable centered v-slot="props">
@@ -151,13 +150,16 @@
                 </span>
         </b-table-column>
 
-        <b-table-column label="Gender" v-slot="props">
-                <span>
-                    <b-icon pack="fas"
-                            :icon="props.row.gender === 'Male' ? 'mars' : 'venus'">
-                    </b-icon>
-                    {{ props.row.gender }}
-                </span>
+        <b-table-column label="Labels" v-slot="props">
+          <b-tag
+              v-for="(label, index) in props.row.labels"
+              :key="index"
+              v-if="index < 2"
+              type="is-info"
+              class="tag-spacing"
+          >
+            {{ label }}
+          </b-tag>
         </b-table-column>
 
         <b-table-column v-slot="props">
@@ -172,19 +174,18 @@
           <article class="media">
             <figure class="media-left">
               <p class="image is-64x64">
-                <img src="/images/face-5.jpg">
+                <img :src="props.row.cover">
               </p>
             </figure>
             <div class="media-content">
               <div class="content">
                 <p>
-                  <strong>{{ props.row.user.first_name }} {{ props.row.user.last_name }}</strong>
-                  <small>@{{ props.row.user.first_name }}</small>
+                  <strong>{{ props.row.title }}</strong> |
+                  <i>{{ props.row.author }}</i> |
+                  <small>@{{ props.row.labels.join(',') }}</small>
                   <small>31m</small>
                   <br>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Proin ornare magna eros, eu pellentesque tortor vestibulum ut.
-                  Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                  {{ props.row.content }}
                 </p>
               </div>
             </div>
@@ -258,9 +259,12 @@ export default {
       })
     },
     async getSearchData() {
-      await axios.get('/home/getSearchData').then(res => {
+      await axios.get('/home/getNews').then(res => {
         if(res.data.code === 200) {
-          this.searchData = res.data.data
+          this.tableData = res.data.data
+          this.tableData.forEach(item => {
+            this.searchData.push(item.title, item.author, ...item.labels)
+          })
         }
       })
     }
@@ -317,6 +321,10 @@ export default {
   width: 70%;
   /* 调整这个值来改变表格的宽度 */
   margin: auto;
-  margin-top: 20px;
+  margin-top: 5%;
+}
+.tag-spacing{
+  margin-right: 5px;
+  /* 调整这个值来改变标签之间的间距 */
 }
 </style>
