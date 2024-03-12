@@ -120,14 +120,20 @@
 
 <!--    下面是表格所在-->
 <!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
-
-    <section class="table-width">
-      <b-field>
-        <b-button type="is-danger" @click="deleteSelected"
-                  label="删除选中" icon-left="close"
-                  class="delete-selected"
+    <b-field class="table-buttons">
+      <b-tooltip label="Add" class="add-button">
+        <b-button type="is-primary"
+                  icon-left="plus"
         ></b-button>
-      </b-field>
+      </b-tooltip>
+      <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
+        <b-button type="is-danger" @click="deleteSelected"
+                  icon-left="delete"
+                  v-if="checkedRows.length > 0"
+        ></b-button>
+      </b-tooltip>
+    </b-field>
+    <section class="table-width">
       <b-table
           :data="fliteredData"
           ref="table"
@@ -381,18 +387,29 @@ export default {
   width: 70%;
   /* 调整这个值来改变表格的宽度 */
   margin: auto;
-  margin-top: 5%;
+  margin-top: 20px;
 }
 .tag-spacing{
   margin-right: 5px;
   /* 调整这个值来改变标签之间的间距 */
 }
 .delete-selected{
-  margin-left: 20px;
+  //margin-left: 94%;
+  margin-left: 63%;
   /* 调整这个值来改变删除选中按钮的左边外边距 */
+  margin-bottom: 10px;
+}
+.add-button{
+  margin-left: 5%;
+  /* 调整这个值来改变添加按钮的左边外边距 */
   margin-bottom: 10px;
 }
 .icon{
   visibility: visible;
+}
+.table-buttons{
+  width: 100%;
+  margin-left: 10%;
+  margin-top: 20px;
 }
 </style>
