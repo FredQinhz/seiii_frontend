@@ -122,9 +122,11 @@
 <!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
     <b-field class="table-buttons">
       <b-tooltip label="Add" class="add-button">
-        <b-button type="is-primary"
-                  icon-left="plus"
-        ></b-button>
+        <router-link to="/details">
+          <b-button type="is-primary"
+                    icon-left="plus"
+          ></b-button>
+        </router-link>
       </b-tooltip>
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
         <b-button type="is-danger" @click="deleteSelected"
