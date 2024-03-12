@@ -144,7 +144,7 @@
           aria-current-label="Current page"
           checkable
           :checkbox-position="'right'"
-          checked-rows.sync="checkedRows"
+          :checked-rows.sync="checkedRows"
           checkbox-type="is-danger"
           hoverable
       >
@@ -183,7 +183,9 @@
         </b-table-column>
 
         <b-table-column v-slot="props">
-          <b-icon icon="pencil" @click="editItem(props.row.id)"></b-icon>
+          <b-tooltip label="Edit">
+            <b-icon icon="pencil" @click="editItem(props.row.id)"></b-icon>
+          </b-tooltip>
         </b-table-column>
 
         <b-table-column v-slot="props">
@@ -226,7 +228,6 @@ import axios from "axios";
 const searchData = []
 //表格数据:包括id,用户信息,日期,性别
 const tableData =[]
-const checkedRows = []
 // const tableData = require('@/data/sample.json')
 export default {
   data() {
@@ -248,7 +249,7 @@ export default {
       showDetailIcon: true,
       useTransition: false,
       searchStatus: false,
-      checkedRows
+      checkedRows : [],
     }
   },
   computed: {
@@ -310,8 +311,19 @@ export default {
       console.log(this.searchName)
     },
     deleteSelected() {
-      console.log(this.checkedRows)
-    }
+      console.log(this.checkedRows.length)
+      this.checkedRows.forEach(row => {
+        // 找到 row 在 tableData 中的索引
+        const index = this.tableData.indexOf(row)
+        // 如果找到了，就从 tableData 中删除
+        if (index !== -1) {
+          this.tableData.splice(index, 1)
+        }
+      })
+      // 清空 checkedRows 数组
+      this.checkedRows = []
+    },
+
   },
   created() {
     this.getTableData()
@@ -379,5 +391,8 @@ export default {
   margin-left: 20px;
   /* 调整这个值来改变删除选中按钮的左边外边距 */
   margin-bottom: 10px;
+}
+.icon{
+  visibility: visible;
 }
 </style>
