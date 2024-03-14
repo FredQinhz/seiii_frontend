@@ -169,7 +169,7 @@
         </b-table-column>
 
         <b-table-column field="author" label="Author" sortable v-slot="props">
-          {{ props.row.author }}
+          {{ props.row.source }}
         </b-table-column>
 
         <b-table-column field="date" label="Date" sortable centered v-slot="props">
@@ -178,17 +178,17 @@
                 </span>
         </b-table-column>
 
-        <b-table-column label="Labels" v-slot="props">
-          <b-tag
-              v-for="(label, index) in props.row.labels"
-              :key="index"
-              v-if="index < 2"
-              type="is-info"
-              class="tag-spacing"
-          >
-            {{ label }}
-          </b-tag>
-        </b-table-column>
+<!--        <b-table-column label="Labels" v-slot="props">-->
+<!--          <b-tag-->
+<!--              v-for="(label, index) in props.row.labels"-->
+<!--              :key="index"-->
+<!--              v-if="index < 2"-->
+<!--              type="is-info"-->
+<!--              class="tag-spacing"-->
+<!--          >-->
+<!--            {{ label }}-->
+<!--          </b-tag>-->
+<!--        </b-table-column>-->
 
         <b-table-column v-slot="props">
           <b-tooltip label="Edit">
@@ -309,7 +309,7 @@ export default {
         if(res.data.code === 200) {
           this.tableData = res.data.data
           this.tableData.forEach(item => {
-            this.searchData.push(item.title, item.author, ...item.labels)
+            this.searchData.push(item.title, item.source, ...item.labels)
           })
         }
       })
