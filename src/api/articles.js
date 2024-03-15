@@ -36,3 +36,17 @@ export function updateArticle(id, article) {
     data: article
   });
 }
+
+export function searchArticles(keyword) {
+  return request({
+    method: "GET",
+    url: `https://localhost:8080/rawdata/search/${keyword}`
+  });
+}
+
+export function getKeywords() {
+  return request({
+    method: "GET",
+    url: `https://localhost:8080/rawdata/keywords`
+  });
+}

@@ -13,10 +13,6 @@
  * @example
  * <TestPage :data="['Angular', 'Angular 2', 'Aurelia', 'Backbone', 'Ember', 'jQuery', 'Meteor', 'Node.js', 'Polymer', 'React', 'RxJS', 'Vue.js']" :name="name" :selected="selected" />
  */
- <script setup>
-
- import {right} from "core-js/internals/array-reduce";
- </script>
 <template>
 
   <div>
@@ -35,66 +31,47 @@
             <h3>
               选择或输入你筛选的标准
             </h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
-              Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus.
-              <br />
-              Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
-            </p>
-            <b-field grouped group-multiline>
-              <b-field label="选择数值">
-                <b-numberinput v-model="maxs"></b-numberinput>
-              </b-field>
-              <b-field label="输入内容">
-                <b-input v-model="packs" placeholder="e.g. mdi, fa or other"></b-input>
-              </b-field>
-              <b-field label="输入内容">
-                <b-input v-model="icons"></b-input>
-              </b-field>
-            </b-field>
             <div class="block">
-              <b-field grouped group-multiline>
-                <b-field label="Custom Text">
-                  <b-input v-model="custom" placeholder="e.g. Points or Total reviews">
-                  </b-input>
-                </b-field>
-                <b-field label="下拉选择">
-                  <b-select v-model="sizes">
-                    <option value="">default</option>
-                    <option value="is-small">is-small</option>
-                    <option value="is-medium">is-medium</option>
-                    <option value="is-large">is-large</option>
-                  </b-select>
-                </b-field>
+              <b-field grouped group-multiline label="选择匹配模式">
+                <b-radio v-model="searchMode" native-value=true>
+                  严格匹配
+                </b-radio>
+                <b-radio v-model="searchMode" native-value=false>
+                  模糊匹配
+                </b-radio>
+              </b-field>
+            </div>
+            <div class="block">
+              <b-field grouped group-multiline label="选择时间范围">
+                <b-datetimepicker
+                    v-model="startTime"
+                    rounded
+                    placeholder="Start Time"
+                    icon="calendar-today"
+                    :icon-right="startTime ? 'close-circle' : ''"
+                    icon-right-clickable
+                    @icon-right-click="clearStartTime"
+                    horizontal-time-picker>
+                </b-datetimepicker>
+                <b-datetimepicker
+                    v-model="endTime"
+                    rounded
+                    placeholder="End Time"
+                    icon="calendar-today"
+                    :icon-right="endTime ? 'close-circle' : ''"
+                    icon-right-clickable
+                    @icon-right-click="clearEndTime"
+                    horizontal-time-picker>
+                </b-datetimepicker>
               </b-field>
             </div>
             <b-field label="输入标签">
               <b-taginput
                   v-model="texts"
-                  :maxtags="maxs"
+                  :maxtags="10"
                   :disabled="score">
               </b-taginput>
             </b-field>
-            <div class="block">
-              <b-field label="多选框">
-                <b-checkbox v-model="checkboxGroup"
-                            native-value="Silver">
-                  Silver
-                </b-checkbox>
-                <b-checkbox v-model="checkboxGroup"
-                            native-value="Flint">
-                  Flint
-                </b-checkbox>
-                <b-checkbox v-model="checkboxGroup"
-                            native-value="Vane">
-                  Vane
-                </b-checkbox>
-                <b-checkbox v-model="checkboxGroup"
-                            native-value="Billy" disabled>
-                  Billy
-                </b-checkbox>
-              </b-field>
-            </div>
           </div>
         </div>
       </b-collapse>
@@ -140,7 +117,7 @@
           :data="fliteredData"
           ref="table"
           paginated
-          per-page="10"
+          per-page="3"
           :opened-detailed="defaultOpenedDetails"
           detailed
           detail-key="id"
@@ -155,6 +132,7 @@
           :checked-rows.sync="checkedRows"
           checkbox-type="is-danger"
           hoverable
+          @page-change="pageChanged"
       >
 
         <!--  下面是图表项      -->
@@ -232,7 +210,6 @@
 <script>
 
 import axios from "axios";
-
 const searchData = []
 //表格数据:包括id,用户信息,日期,性别
 const tableData =[]
@@ -245,9 +222,7 @@ export default {
       searchName: '',
       name:'',
       selected: null,
-      maxs: 5,
-      packs: 'mdi',
-      icons: 'star',
+      searchMode:false,
       custom:'',
       sizes: '',
       texts: ['Points', 'Total reviews'],
@@ -258,6 +233,8 @@ export default {
       useTransition: false,
       searchStatus: false,
       checkedRows : [],
+      startTime: null,
+      endTime: null,
     }
   },
   computed: {
@@ -285,7 +262,7 @@ export default {
       this.searchStatus = false
       return this.tableData.filter(item => {
         return item.title.toLowerCase().includes(searchTerm) ||
-            item.author.toLowerCase().includes(searchTerm) ||
+            item.source.toLowerCase().includes(searchTerm) ||
             item.labels.some(label => label.toLowerCase().includes(searchTerm))
       })
     }
@@ -331,6 +308,16 @@ export default {
       // 清空 checkedRows 数组
       this.checkedRows = []
     },
+    pageChanged(pageNumber) {
+      console.log(pageNumber)
+      console.log(this.searchMode)
+    },
+    clearStartTime () {
+      this.startTime = null
+    },
+    clearEndTime () {
+      this.endTime = null
+    }
 
   },
   created() {
