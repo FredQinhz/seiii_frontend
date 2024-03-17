@@ -99,7 +99,7 @@
 <!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
     <b-field class="table-buttons">
       <b-tooltip label="Add" class="add-button">
-        <router-link to="/details">
+        <router-link to="/addNews">
           <b-button type="is-primary"
                     icon-left="plus"
           ></b-button>

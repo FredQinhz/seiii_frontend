@@ -30,6 +30,12 @@ let routes = [
 		component: () => import('../views/details.vue'),
 	},
 	{
+		path: '/addNews',
+		name: 'AddNews',
+		layout: "dashboard",
+		component: () => import('../views/addNews.vue'),
+	},
+	{
 		path: '/layout',
 		name: 'Layout',
 		layout: "dashboard",
