@@ -69,6 +69,31 @@ todo:修改删除按钮样式,使得选择不为空时可以点击(check),再增
 - 3.12
 完成了删除选中项
 
+- 3.13
+完成了addNews页面的大致形态
+
+- 3.14 
+完成了editNews页面，但是需要home.vue传递参数，如下：
+```js
+// home.vue
+  async handleEditNews(id) {
+    try {
+      const response = await this.$axios.get(`/api/news/${id}`); // 假设后端接口路径为/api/news/:id
+      const newsData = response.data; // 获取后端返回的新闻数据
+      this.$router.push({ name: 'editNews', params: { newsData } }); // 跳转到 editNews.vue 并传递新闻数据
+    } catch (error) {
+      console.error('获取新闻数据失败', error);
+    }
+  }
+```
+```js
+// editNews.vue
+created() {
+    const newsData = this.$route.params.newsData;
+}
+```
+
+
 **TODO**:搜索的按下空格触发不能正常运行
 
 ## 前后端对接

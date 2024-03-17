@@ -2,7 +2,7 @@
     <div>
       <section class="section">
         <div class="container">
-          <h1 class="title">Add News</h1>
+          <h1 class="title">Edit News</h1>
           <b-field label="Title">
             <b-input v-model="title" type="text" placeholder="Enter title" required></b-input>
           </b-field>
@@ -62,7 +62,7 @@
             </div>
           </b-field>
           
-        <b-button @click="addNews" type="is-primary">Add News</b-button>
+        <b-button @click="submit" type="is-primary">提交</b-button>
       </div>
     </section>
   </div>
@@ -74,6 +74,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      id: '',
       title: '',
       content: '',
       author: '',
@@ -85,8 +86,19 @@ export default {
       newLabel: '', // 新添加的关键词
     };
   },
+  created() {
+    const newsData = this.$route.params.newsData;
+    this.id = newsData.id;
+    this.title = newsData.title;
+    this.content = newsData.content;
+    this.author = newsData.author;
+    this.data = newsData.date;
+    this.labels = newsData.labels;
+    this.types = newsData.types;
+  },
+
   methods: {
-    addNews() {
+    submit() {
       // 校验
       if (this.title === '' || this.content === ''|| this.author === ''|| this.date === null || this.selectedTypes.length === 0 || this.labels.length === 0) {
         alert("提交失败，请重试！");
@@ -94,6 +106,7 @@ export default {
       }
 
       const newNews = {
+        // id: this.id,  //  后端不需要传过去的news结构中包含id
         title: this.title,
         content: this.content,
         author: this.author,
@@ -103,23 +116,25 @@ export default {
       };
         
       // 调用异步函数提交新闻数据并清空表单
-      this.submitNews(newNews)
+      this.submitNews(newNews, this.id)
         .then(() => {
+          this.id = '';
           this.title = '';
           this.content = '';
           this.author = '';
           this.date = null;
           this.selectedTypes = [];
           this.labels = [];
-          alert("新闻添加成功！");
+          alert("新闻修改成功！");
         })
         .catch(() => {
           alert("提交失败，请重试！！");
+        //   alert(JSON.stringify(newNews));
         });
     },
-    async submitNews(newNews) {
+    async submitNews(newNews, id) {
       try {
-        await axios.post('/home/addNews', newNews);
+        await axios.put('/home/editNews?id=${id}', newNews);
       } catch (error) {
         console.error('Error submitting news:', error);
         throw error;

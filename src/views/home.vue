@@ -105,6 +105,15 @@
           ></b-button>
         </router-link>
       </b-tooltip>
+
+      <b-tooltip label="Edit" class="edit-button">
+        <router-link to="/editNews">
+          <b-button type="is-primary"
+                    icon-left="minus"
+          ></b-button>
+        </router-link>
+      </b-tooltip>
+
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
         <b-button type="is-danger" @click="deleteSelected"
                   icon-left="delete"
