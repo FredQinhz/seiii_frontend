@@ -8,7 +8,7 @@
       <h2 class="title">{{ title }}</h2>
       <p class="author">Author: {{ author }}</p>
       <p class="date">Date: {{ date }}</p>
-      <div class="content">{{ content }}</div>
+      <div class="content" style="white-space: pre-line;">{{ content }}</div>
 
       <button class="edit-button" @click="editNews">
         <b-icon icon="pencil"></b-icon> Edit
