@@ -96,12 +96,12 @@ export default {
         this.updateNews(this.id,newNews)
             .then(() => {
               this.$buefy.snackbar.open({
-                duration: 3000,
+                duration: 1000,
                 message: '编辑成功!',
                 type: 'is-primary',
                 position: 'is-top',
                 actionText: '关闭',
-                indefinite: true,
+                indefinite: false,
               })
               //跳转到新闻列表页面
               this.$router.push({ path: "/home" });
