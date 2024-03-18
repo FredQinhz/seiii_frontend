@@ -111,14 +111,6 @@
         </router-link>
       </b-tooltip>
 
-      <b-tooltip label="n" class="news-button">
-        <router-link to="/news">
-          <b-button type="is-primary"
-                    icon-left="minus"
-          ></b-button>
-        </router-link>
-      </b-tooltip>
-
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
         <b-button type="is-danger" @click="deleteSelected"
                   icon-left="delete"

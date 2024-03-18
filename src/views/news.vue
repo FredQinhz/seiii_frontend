@@ -10,7 +10,7 @@
       <p class="date">Date: {{ date }}</p>
       <div class="content">{{ content }}</div>
 
-      <button class="edit-button" @click="editNews(this.id)">
+      <button class="edit-button" @click="editNews">
         <b-icon icon="pencil"></b-icon> Edit
       </button>
 
@@ -38,9 +38,8 @@ import {getArticle} from "@/api/articles";
       // 返回上一页的操作
       this.$router.go(-1);
       },
-      editNews(id) {
-        // this.$buefy.toast.open(`Edit item ${id}`)
-        this.$router.push({ path: `/addNews/${id}` });
+      editNews() {
+        this.$router.push({ path: `/addNews/${this.id}` });
       },
       async fetchItems(id) {
           try {
