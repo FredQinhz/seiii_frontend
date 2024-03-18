@@ -1,22 +1,22 @@
 /**
- * Component for displaying a selection with filtering options.
- *
- * @component TestPage
- * @description This component renders a selection with filtering options. It includes a collapse section with a button trigger and a content area for filtering options such as checkboxes, radio buttons, and input fields. It also includes a search container with an autocomplete input field for filtering the selection options.
- *
- * @props {Array} data - The array of options for the selection.
- * @props {String} name - The value of the selected option.
- * @props {String} selected - The currently selected option.
- *
- * @computed filteredDataArray - A computed property that filters the data array based on the entered search query.
- *
- * @example
- * <TestPage :data="['Angular', 'Angular 2', 'Aurelia', 'Backbone', 'Ember', 'jQuery', 'Meteor', 'Node.js', 'Polymer', 'React', 'RxJS', 'Vue.js']" :name="name" :selected="selected" />
- */
+* Component for displaying a selection with filtering options.
+*
+* @component TestPage
+* @description This component renders a selection with filtering options. It includes a collapse section with a button trigger and a content area for filtering options such as checkboxes, radio buttons, and input fields. It also includes a search container with an autocomplete input field for filtering the selection options.
+*
+* @props {Array} data - The array of options for the selection.
+* @props {String} name - The value of the selected option.
+* @props {String} selected - The currently selected option.
+*
+* @computed filteredDataArray - A computed property that filters the data array based on the entered search query.
+*
+* @example
+* <TestPage :data="['Angular', 'Angular 2', 'Aurelia', 'Backbone', 'Ember', 'jQuery', 'Meteor', 'Node.js', 'Polymer', 'React', 'RxJS', 'Vue.js']" :name="name" :selected="selected" />
+*/
 <template>
 
   <div>
-<!--    以下section条为搜索栏,包括搜索框,筛选按钮与筛选条件等-->
+    <!--    以下section条为搜索栏,包括搜索框,筛选按钮与筛选条件等-->
     <section class="section-center">
       <!-- <p class="content"><b>Selected:</b> {{ selected }}</p> -->
       <b-collapse :open="false" aria-id="contentIdForA11y1">
@@ -67,10 +67,15 @@
             </div>
             <b-field label="输入标签">
               <b-taginput
-                  v-model="texts"
+                  v-model="labelTexts"
                   :maxtags="10"
                   :disabled="score">
               </b-taginput>
+            </b-field>
+            <b-field>
+              <b-button type="is-primary" outlined>
+                筛选
+              </b-button>
             </b-field>
           </div>
         </div>
@@ -91,12 +96,12 @@
             <template #empty>No results found</template>
           </b-autocomplete>
         </b-field>
-         <a-button type="is-ghost" shape="circle" icon="search" class="searchbutton" @click="performSearch"/>
+        <a-button type="is-ghost" shape="circle" icon="search" class="searchbutton" @click="performSearch"/>
       </div>
     </section>
 
-<!--    下面是表格所在-->
-<!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
+    <!--    下面是表格所在-->
+    <!--    默认打开:@details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"-->
     <b-field class="table-buttons">
       <b-tooltip label="Add" class="add-button">
         <router-link to="/addNews">
@@ -105,16 +110,6 @@
           ></b-button>
         </router-link>
       </b-tooltip>
-
-      <!-- 仅仅只用于editNews页面调试 -->
-      <b-tooltip label="Edit" class="edit-button">
-        <router-link to="/editNews">
-          <b-button type="is-primary"
-                    icon-left="minus"
-          ></b-button>
-        </router-link>
-      </b-tooltip>
-
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
         <b-button type="is-danger" @click="deleteSelected"
                   icon-left="delete"
@@ -124,10 +119,10 @@
     </b-field>
     <section class="table-width">
       <b-table
-          :data="fliteredData"
+          :data="tableData"
           ref="table"
           paginated
-          per-page="3"
+          per-page="10"
           :opened-detailed="defaultOpenedDetails"
           detailed
           detail-key="id"
@@ -157,7 +152,7 @@
         </b-table-column>
 
         <b-table-column field="author" label="Author" sortable v-slot="props">
-          {{ props.row.source }}
+          {{ props.row.author }}
         </b-table-column>
 
         <b-table-column field="date" label="Date" sortable centered v-slot="props">
@@ -166,26 +161,28 @@
                 </span>
         </b-table-column>
 
-<!--        <b-table-column label="Labels" v-slot="props">-->
-<!--          <b-tag-->
-<!--              v-for="(label, index) in props.row.labels"-->
-<!--              :key="index"-->
-<!--              v-if="index < 2"-->
-<!--              type="is-info"-->
-<!--              class="tag-spacing"-->
-<!--          >-->
-<!--            {{ label }}-->
-<!--          </b-tag>-->
-<!--        </b-table-column>-->
+        <!--        <b-table-column label="Labels" v-slot="props">-->
+        <!--          <b-tag-->
+        <!--              v-for="(label, index) in props.row.labels"-->
+        <!--              :key="index"-->
+        <!--              v-if="index < 2"-->
+        <!--              type="is-info"-->
+        <!--              class="tag-spacing"-->
+        <!--          >-->
+        <!--            {{ label }}-->
+        <!--          </b-tag>-->
+        <!--        </b-table-column>-->
 
         <b-table-column v-slot="props">
           <b-tooltip label="Edit">
-            <b-icon icon="pencil" @click="editItem(props.row.id)"></b-icon>
+            <b-button class="row-button" size="is-middle" icon-right="pencil" @click="editItem(props.row.id)"></b-button>
           </b-tooltip>
         </b-table-column>
 
         <b-table-column v-slot="props">
-          <b-icon icon="delete" @click="deleteItem(props.row.id)"></b-icon>
+          <b-tooltip label="Edit">
+            <b-button class="row-button" size="is-middle" icon-right="delete" @click="deleteItem(props.row.id)"></b-button>
+          </b-tooltip>
         </b-table-column>
 
         <template #detail="props">
@@ -220,10 +217,24 @@
 <script>
 
 import axios from "axios";
+import {getArticles,deleteArticle,deleteArticles,getKeywords} from "@/api/articles";
+
 const searchData = []
 //表格数据:包括id,用户信息,日期,性别
 const tableData =[]
 // const tableData = require('@/data/sample.json')
+let searchAtt = {
+  "query": {
+    "match": {"content": "我叫丁真"},
+    "term": {"title": "烟distance", "author": "硫克克硫"},
+    "range": {
+      "date": {
+        "gt": "2020-10-10",
+        "lt": "2025-01-01"
+      }
+    }
+  }
+};
 export default {
   data() {
     return {
@@ -235,7 +246,7 @@ export default {
       searchMode:false,
       custom:'',
       sizes: '',
-      texts: ['Points', 'Total reviews'],
+      labelTexts: ['Points', 'Total reviews'],
       score: false,
       checkboxGroup: ['Flint'],
       defaultOpenedDetails: [1],
@@ -251,9 +262,9 @@ export default {
     filteredDataArray() {
       return this.searchData.filter((option) => {
         return option
-          .toString()
-          .toLowerCase()
-          .indexOf(this.searchName.toLowerCase()) >= 0
+            .toString()
+            .toLowerCase()
+            .indexOf(this.searchName.toLowerCase()) >= 0
       })
     },
     transitionName() {
@@ -279,54 +290,76 @@ export default {
   },
   methods: {
     editItem(id) {
-      this.$buefy.toast.open(`Edit item ${id}`)
+      // this.$buefy.toast.open(`Edit item ${id}`)
+      this.$router.push({ path: `/addNews/${id}` });
     },
-    deleteItem(id) {
-      this.$buefy.toast.open(`Delete item ${id}`)
+    async deleteItem(id) {
+      // console.log(id)
+      await deleteArticle(id).then(res => {
+        this.getTableData()
+      })
     },
-    async getTableData() {
-      await axios.get('/home/getNews').then(res => {
-        if(res.data.code === 200) {
-          this.tableData = res.data.data
-        }
+    async getTableData(page=0, size=10) {
+      // 调用articles.js
+      await getArticles(page,size).then(res => {
+        // console.log(res)
+        this.tableData = res.data
       })
     },
     async getSearchData() {
-      await axios.get('/home/getNews').then(res => {
-        if(res.data.code === 200) {
-          this.tableData = res.data.data
-          this.tableData.forEach(item => {
-            this.searchData.push(item.title, item.source, ...item.labels)
-          })
-        }
+      await getKeywords().then(res => {
+        this.searchData = res.data
       })
     },
     performSearch() {
       this.searchStatus = true
       console.log(this.searchName)
+      if(this.searchMode) {
+        searchAtt.query.match.content = this.searchName
+      } else {
+        searchAtt.query.match.content = this.searchName
+      }
+      searchAtt.query.match.content = this.searchName
+      searchAtt.query.range.date.gt = this.startTime
+      searchAtt.query.range.date.lt = this.endTime
+
+
     },
     deleteSelected() {
-      console.log(this.checkedRows.length)
-      this.checkedRows.forEach(row => {
-        // 找到 row 在 tableData 中的索引
-        const index = this.tableData.indexOf(row)
-        // 如果找到了，就从 tableData 中删除
-        if (index !== -1) {
-          this.tableData.splice(index, 1)
-        }
+      // 使用id删除
+      var ids = {
+        ids:this.checkedRows.map(item => item.id)
+      }
+      deleteArticles(ids).then(res => {
+        this.getTableData()
       })
-      // 清空 checkedRows 数组
-      this.checkedRows = []
     },
     pageChanged(pageNumber) {
       console.log(pageNumber)
       console.log(this.searchMode)
+      this.getTableData(pageNumber-1)
     },
     clearStartTime () {
       this.startTime = null
     },
     clearEndTime () {
       this.endTime = null
+    },
+    //实现筛选功能
+    filterData() {
+      var query = {
+        "range": {
+          "date": {
+            "gt": "2022-01-01",
+            "lt": "2024-01-01"
+          }
+        },
+        "contains": {
+          "labels":labelTexts
+        },
+
+
+      }
     }
 
   },
@@ -410,5 +443,9 @@ export default {
   width: 100%;
   margin-left: 10%;
   margin-top: 20px;
+}
+.row-button{
+  border: 0px;
+  margin-top: -2px;
 }
 </style>

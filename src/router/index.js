@@ -36,10 +36,10 @@ let routes = [
 		component: () => import('../views/addNews.vue'),
 	},
 	{
-		path: '/editNews',
-		name: 'EditNews',
+		path: '/addNews/:id',
+		name: 'AddNews',
 		layout: "dashboard",
-		component: () => import('../views/editNews.vue'),
+		component: () => import('../views/addNews.vue'),
 	},
 	{
 		path: '/layout',

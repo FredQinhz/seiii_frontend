@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // 创建axios实例
 const instance = axios.create({
-    baseURL: 'http://localhost:8080', // 替换成你的API服务器地址
+    baseURL: 'http://1.94.28.82:8080', // 替换成你的API服务器地址
     timeout: 5000 // 设置超时时间，根据需要调整
 })
 
@@ -13,11 +13,12 @@ instance.interceptors.request.use(config => {
     return config
 }, error => {
     // 对请求错误做些什么
-    this.$buefy.toast.open({
-        duration: 5000,
-        message: `请求错误，请稍后重试`,
-        type: 'is-danger'
-    })
+    // this.$buefy.toast.open({
+    //     duration: 5000,
+    //     message: `请求错误，请稍后重试`,
+    //     type: 'is-danger'
+    // })
+    alert('请求错误，请稍后重试')
     return Promise.reject(error)
 })
 
@@ -27,11 +28,12 @@ instance.interceptors.response.use(response => {
     return response
 }, error => {
     // 对响应错误做点什么
-    this.$buefy.toast.open({
-        duration: 5000,
-        message: `响应失败，请稍后重试`,
-        type: 'is-danger'
-    })
+    // this.$buefy.toast.open({
+    //     duration: 5000,
+    //     message: `响应失败，请稍后重试`,
+    //     type: 'is-danger'
+    // })
+    alert('响应失败，请稍后重试')
     return Promise.reject(error)
 })
 

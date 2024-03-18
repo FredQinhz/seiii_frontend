@@ -1,38 +1,44 @@
 import request from "@/api/request";
 
-export function getArticles() {
+export function getArticles(page, size) {
   return request({
     method: "GET",
-    url: "https://localhost:8080/rawdata"
+    url: "/rawdata?/page=" + page + "&pageSize=" + size,
   });
 }
 
 export function getArticle(id) {
   return request({
     method: "GET",
-    url: `https://localhost:8080/rawdata/${id}`
+    url: `/rawdata/${id}`
   });
 }
 
 export function addArticle(article) {
   return request({
     method: "POST",
-    url: "https://localhost:8080/rawdata",
+    url: "/rawdata",
     data: article
   });
 }
 
 export function deleteArticle(id) {
-    return request({
-        method: "DELETE",
-        url: `https://localhost:8080/rawdata/${id}`
-    });
+  return request({
+    method: "DELETE",
+    url: `/rawdata/${id}`
+  });
 }
-
+export function deleteArticles(ids) {
+  return request({
+    method: "DELETE",
+    url: `/rawdata`,
+    data: ids
+  });
+}
 export function updateArticle(id, article) {
   return request({
     method: "PUT",
-    url: `https://localhost:8080/rawdata/${id}`,
+    url: `/rawdata/${id}`,
     data: article
   });
 }
@@ -40,13 +46,19 @@ export function updateArticle(id, article) {
 export function searchArticles(keyword) {
   return request({
     method: "GET",
-    url: `https://localhost:8080/rawdata/search/${keyword}`
+    url: `/search/${keyword}`
   });
 }
 
 export function getKeywords() {
   return request({
     method: "GET",
-    url: `https://localhost:8080/rawdata/keywords`
+    url: `/rawdata/keywords`
+  });
+}
+export function filterArticles(query) {
+  return request({
+    method: "post",
+    url: `/rawdata/filter/${keyword}`
   });
 }

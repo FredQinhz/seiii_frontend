@@ -1,6 +1,8 @@
 module.exports = {
 	runtimeCompiler: true,
-
+	devServer: {
+		port: 8081,
+	},
 	chainWebpack: config => {
 		config
 			.plugin('html')

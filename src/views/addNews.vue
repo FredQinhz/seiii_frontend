@@ -1,94 +1,82 @@
 <template>
-    <div>
-      <section class="section">
-        <div class="container">
-          <h1 class="title">Add News</h1>
-          <b-field label="Title">
-            <b-input v-model="title" type="text" placeholder="Enter title" required></b-input>
-          </b-field>
-          
-          <b-field label="Content">
-            <b-input v-model="content" type="textarea" placeholder="Enter content" required></b-input>
-          </b-field>
-          
-          <b-field label="Author">
-            <b-input v-model="author" type="text" placeholder="Enter author" required></b-input>
-          </b-field>
-          
-          <b-field label="Date">
-            <b-datepicker v-model="date" placeholder="Select date" required></b-datepicker>
-          </b-field>
-          
-          <b-field label="Types">
-            <b-checkbox-button v-model="selectedTypes"
-                native-value="科技" required>
-                <span>科技</span>
-            </b-checkbox-button>
-  
-            <b-checkbox-button v-model="selectedTypes"
-                native-value="体育" required>
-                <span>体育</span>
-            </b-checkbox-button>
-    
-            <b-checkbox-button v-model="selectedTypes"
-                native-value="娱乐" required>
-                <span>娱乐</span>
-            </b-checkbox-button>
-    
-            <b-checkbox-button v-model="selectedTypes"
-                native-value="财经" required>
-                <span>财经</span>
-            </b-checkbox-button>
-    
-            <b-checkbox-button v-model="selectedTypes"
-                native-value="其他" required>
-                <span>其他</span>
-            </b-checkbox-button>
-          </b-field>
-          <p class="content">
-            <b>selectedTypes:</b>
-            {{ selectedTypes }}
-          </p>
+  <div>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Add News</h1>
+        <b-field label="Title">
+          <b-input v-model="title" type="text" placeholder="Enter title" required></b-input>
+        </b-field>
 
-          <b-field label="Labels">
-            <div>
-              <div v-for="(label, index) in labels" :key="index">
-                <span>{{ label }}</span>
-                <button type="is-danger" @click="removeLabel(index)"
-                    icon-left="delete">删除</button>
-              </div>
-              <input v-model="newLabel" placeholder="输入新关键词" />
-              <button @click="addNewLabel">添加关键词</button>
-            </div>
-          </b-field>
-          
-        <b-button @click="addNews" type="is-primary">Add News</b-button>
+        <b-field label="Content">
+          <b-input v-model="content" type="textarea" placeholder="Enter content" required></b-input>
+        </b-field>
+
+        <b-field label="author">
+          <b-input v-model="author" type="text" placeholder="Enter author" required></b-input>
+        </b-field>
+
+        <b-field label="Date">
+          <b-datepicker v-model="date" placeholder="Select date" required></b-datepicker>
+        </b-field>
+
+        <!--          <b-field label="Labels">-->
+        <!--            <b-checkbox-button v-model="selectedLabels"-->
+        <!--                native-value="科技" required>-->
+        <!--                <span>科技</span>-->
+        <!--            </b-checkbox-button>-->
+
+        <!--            <b-checkbox-button v-model="selectedLabels"-->
+        <!--                native-value="体育" required>-->
+        <!--                <span>体育</span>-->
+        <!--            </b-checkbox-button>-->
+
+        <!--            <b-checkbox-button v-model="selectedLabels"-->
+        <!--                native-value="娱乐" required>-->
+        <!--                <span>娱乐</span>-->
+        <!--            </b-checkbox-button>-->
+
+        <!--            <b-checkbox-button v-model="selectedLabels"-->
+        <!--                native-value="财经" required>-->
+        <!--                <span>财经</span>-->
+        <!--            </b-checkbox-button>-->
+
+        <!--            <b-checkbox-button v-model="selectedLabels"-->
+        <!--                native-value="其他" required>-->
+        <!--                <span>其他</span>-->
+        <!--            </b-checkbox-button>-->
+        <!--          </b-field>-->
+        <!--          <p class="content">-->
+        <!--            <b>selectedLabels:</b>-->
+        <!--            {{ selectedLabels }}-->
+        <!--          </p>-->
+
+        <b-button @click="addNews" type="is-primary">{{isEdit ? 'Save' : 'Add News'}} </b-button>
       </div>
     </section>
   </div>
 </template>
-  
+
 <script>
 import axios from "axios";
+import {addArticle,getArticle,updateArticle} from "@/api/articles";
 
 export default {
   data() {
     return {
+      id: '',
       title: '',
       content: '',
       author: '',
       date: null,
-      labels: [],
-      types: [],
-
-      selectedTypes: [],
-      newLabel: '', // 新添加的关键词
+      // labels: ['科技', '体育', '娱乐', '财经', '其他'],
+      // selectedLabels: [],
+      isEdit: false
     };
   },
   methods: {
     addNews() {
       // 校验
-      if (this.title === '' || this.content === ''|| this.author === ''|| this.date === null || this.selectedTypes.length === 0 || this.labels.length === 0) {
+      if (this.title === '' || this.content === ''|| this.author === ''|| this.date === null) {
         alert("提交失败，请重试！");
         return;
       }
@@ -98,46 +86,91 @@ export default {
         content: this.content,
         author: this.author,
         date: this.date,
-        types: this.selectedTypes,
-        labels: this.labels
+        // labels: this.selectedLabels
       };
-        
+
       // 调用异步函数提交新闻数据并清空表单
-      this.submitNews(newNews)
-        .then(() => {
-          this.title = '';
-          this.content = '';
-          this.author = '';
-          this.date = null;
-          this.selectedTypes = [];
-          this.labels = [];
-          alert("新闻添加成功！");
-        })
-        .catch(() => {
-          alert("提交失败，请重试！！");
-        });
+      if (this.isEdit) {
+        // 如果是编辑状态，调用更新新闻的函数
+        this.updateNews(this.id,newNews)
+            .then(() => {
+              this.$buefy.snackbar.open({
+                duration: 3000,
+                message: '编辑成功!',
+                type: 'is-primary',
+                position: 'is-top',
+                actionText: '关闭',
+                indefinite: true,
+              })
+              //跳转到新闻列表页面
+              this.$router.push({ path: "/home" });
+            })
+            .catch(() => {
+              alert("提交失败，请重试！!");
+            });
+      } else{
+        this.submitNews(newNews)
+            .then(() => {
+              this.title = '';
+              this.content = '';
+              this.author = '';
+              this.date = null;
+              // this.selectedLabels = [];
+              alert("新闻添加成功！");
+              //跳转到新闻列表页面
+              this.$router.push({ path: "/home" });
+            })
+            .catch(() => {
+              alert("提交失败，请重试！!");
+            });
+      }
     },
     async submitNews(newNews) {
+      // 将日期转换为年月日的形式
+      newNews.date = new Date(newNews.date).toISOString().split('T')[0];
       try {
-        await axios.post('/home/addNews', newNews);
+        await addArticle(newNews);
       } catch (error) {
-        console.error('Error submitting news:', error);
+        console.error(error);
         throw error;
       }
     },
-
-    removeLabel(index) {
-      this.labels.splice(index, 1); // 删除选定索引的关键词
-    },
-    addNewLabel() {
-      if (this.newLabel) {
-        this.labels.push(this.newLabel); // 添加新关键词到数组
-        this.newLabel = ''; // 清空输入框
+    async updateNews(id,newNews) {
+      // 将日期转换为年月日的形式
+      newNews.date = new Date(newNews.date).toISOString().split('T')[0];
+      try {
+        await updateArticle(id,newNews);
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
     },
+    async fetchItems(id) {
+      try {
+        await getArticle(id).then((res) => {
+          this.title = res.data.title;
+          this.content = res.data.content;
+          this.author = res.data.author;
+          var date = res.data.date;
+          this.date = new Date(date);
+          this.id = res.data.id;
+          // this.selectedLabels = res.data.labels;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+  created() {
+    const id = this.$route.params.id;
+    // id不为空则调用fetchItems函数获取新闻数据
+    if (id) {
+      this.isEdit = true;
+      this.fetchItems(id);
+    }
   }
 };
 </script>
-  
+
 <style>
 </style>
