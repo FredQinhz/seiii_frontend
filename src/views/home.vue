@@ -110,6 +110,15 @@
           ></b-button>
         </router-link>
       </b-tooltip>
+
+      <b-tooltip label="n" class="news-button">
+        <router-link to="/news">
+          <b-button type="is-primary"
+                    icon-left="minus"
+          ></b-button>
+        </router-link>
+      </b-tooltip>
+
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
         <b-button type="is-danger" @click="deleteSelected"
                   icon-left="delete"
@@ -145,8 +154,13 @@
           {{ props.row.id }}
         </b-table-column>
 
-        <b-table-column field="title" label="Title" sortable v-slot="props">
+        <!-- <b-table-column field="title" label="Title" sortable v-slot="props">
           <a @click="props.toggleDetails(props.row)">
+            {{ props.row.title }}
+          </a>
+        </b-table-column> -->
+        <b-table-column field="title" label="Title" sortable v-slot="props">
+          <a @click="newsItem(props.row.id)">
             {{ props.row.title }}
           </a>
         </b-table-column>
@@ -292,6 +306,10 @@ export default {
     editItem(id) {
       // this.$buefy.toast.open(`Edit item ${id}`)
       this.$router.push({ path: `/addNews/${id}` });
+    },
+    newsItem(id) {
+      // this.$buefy.toast.open(`Edit item ${id}`)
+      this.$router.push({ path: `/news/${id}` });
     },
     async deleteItem(id) {
       // console.log(id)

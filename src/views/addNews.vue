@@ -2,22 +2,23 @@
   <div>
     <section class="section">
       <div class="container">
-        <h1 class="title">Add News</h1>
+        <h1 class="title">{{isEdit ? 'Edit News' : 'Add News'}}</h1>
         <b-field label="Title">
           <b-input v-model="title" type="text" placeholder="Enter title" required></b-input>
-        </b-field>
-
-        <b-field label="Content">
-          <b-input v-model="content" type="textarea" placeholder="Enter content" required></b-input>
         </b-field>
 
         <b-field label="author">
           <b-input v-model="author" type="text" placeholder="Enter author" required></b-input>
         </b-field>
 
-        <b-field label="Date">
+      <b-field label="Date">
           <b-datepicker v-model="date" placeholder="Select date" required></b-datepicker>
         </b-field>
+
+        <b-field label="Content">
+          <b-input v-model="content" type="textarea" placeholder="Enter content" rows="10" required></b-input>
+        </b-field>
+
 
         <!--          <b-field label="Labels">-->
         <!--            <b-checkbox-button v-model="selectedLabels"-->

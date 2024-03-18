@@ -42,6 +42,12 @@ let routes = [
 		component: () => import('../views/addNews.vue'),
 	},
 	{
+		path: '/news/:id',
+		name: 'News',
+		layout: "dashboard",
+		component: () => import('../views/news.vue'),
+	},
+	{
 		path: '/layout',
 		name: 'Layout',
 		layout: "dashboard",
