@@ -85,7 +85,7 @@
         <b-field class="autocompleteWidth">
           <b-autocomplete rounded v-model="searchName"
                           :data="filteredDataArray"
-                          placeholder="e.g. jQuery"
+                          placeholder="请输入搜索内容"
                           icon="magnify"
                           clearable class="inputheight"
                           @select="option => selected = option"
@@ -187,7 +187,7 @@
         </b-table-column>
 
         <b-table-column v-slot="props">
-          <b-tooltip label="Edit">
+          <b-tooltip label="Delete">
             <b-button class="row-button" size="is-middle" icon-right="delete" @click="deleteItem(props.row.id)"></b-button>
           </b-tooltip>
         </b-table-column>
@@ -205,7 +205,6 @@
                   <strong>{{ props.row.title }}</strong> |
                   <i>{{ props.row.author }}</i> |
                   <small>@{{ props.row.labels.join(',') }}</small>
-                  <small>31m</small>
                   <br>
                   {{ props.row.content }}
                 </p>
