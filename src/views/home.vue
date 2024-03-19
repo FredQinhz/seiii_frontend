@@ -278,8 +278,8 @@ export default {
         },
         "author": "",
         "date": {
-            "gte": "",
-            "lte": "",
+            "gte": null,
+            "lte": null,
         },
       },
       labelTexts: ['标签1', '标签2'],
@@ -376,7 +376,7 @@ export default {
       }    
 
       this.searchStatus = true
-      console.log(JSON.stringify(this.searchAtt))
+      console.log(JSON.stringify(this.searchAtta))
 
       searchArticles(page, size, search).then(res => {
         this.getTableData()
@@ -398,10 +398,10 @@ export default {
       this.getTableData(pageNumber-1)
     },
     clearStartTime () {
-      this.searchAtt.date.gte = ""
+      this.searchAtt.date.gte = null
     },
     clearEndTime () {
-      this.searchAtt.date.lte = ""
+      this.searchAtt.date.lte = null
     },
     // //实现筛选功能
     // filterData() {
