@@ -43,10 +43,11 @@ export function updateArticle(id, article) {
   });
 }
 
-export function searchArticles(keyword) {
+export function searchArticles(page, size, search) {
   return request({
-    method: "GET",
-    url: `/search/${keyword}`
+    method: "POST",
+    url: "/rawdata/query?/page=" + page + "&pageSize=" + size,
+    data: search
   });
 }
 

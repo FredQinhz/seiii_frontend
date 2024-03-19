@@ -51,7 +51,8 @@
         <!--            {{ selectedLabels }}-->
         <!--          </p>-->
 
-        <b-button @click="addNews" type="is-primary">{{isEdit ? 'Save' : 'Add News'}} </b-button>
+        <b-button class="confirm-button" @click="addNews" type="is-primary">{{isEdit ? 'Save' : 'Add News'}} </b-button>
+        <b-button class="cancel-button" @click="goBack" type="is-primary" outlined>取消</b-button>
       </div>
     </section>
   </div>
@@ -75,6 +76,10 @@ export default {
     };
   },
   methods: {
+    goBack() {
+      // 返回上一页的操作
+      this.$router.go(-1);
+      },
     addNews() {
       // 校验
       if (this.title === '' || this.content === ''|| this.author === ''|| this.date === null) {
@@ -174,4 +179,10 @@ export default {
 </script>
 
 <style>
+.confirm-button {
+  margin-right: 10px;
+}
+.cancel-button {
+  margin-left: 10px;
+}
 </style>

@@ -32,40 +32,60 @@
               选择或输入你筛选的标准
             </h3>
             <div class="block">
-              <b-field grouped group-multiline label="选择匹配模式">
-                <b-radio v-model="searchMode" native-value=true>
-                  严格匹配
-                </b-radio>
-                <b-radio v-model="searchMode" native-value=false>
-                  模糊匹配
-                </b-radio>
+              <div>
+                <b-field label="搜索范围">
+                  <b-checkbox-button v-model="searchAtt.search.fields"
+                    native-value="title" required>
+                    <span>标题</span>
+                  </b-checkbox-button>
+                  <b-checkbox-button v-model="searchAtt.search.fields"
+                    native-value="content" required>
+                    <span>内容</span>
+                  </b-checkbox-button>
+                   
+                </b-field>
+                <b-field grouped group-multiline label="匹配模式">
+                  <b-radio v-model.number="searchAtt.search.mode" native-value="0">
+                    模糊匹配
+                  </b-radio>  
+                  <b-radio v-model.number="searchAtt.search.mode" native-value="1">
+                    严格匹配
+                  </b-radio>
+                </b-field>
+              </div>
+              <br>
+              <b-field label="作者名">
+                <b-input v-model="searchAtt.author"></b-input>
               </b-field>
             </div>
             <div class="block">
-              <b-field grouped group-multiline label="选择时间范围">
+              <b-field grouped group-multiline label="时间范围">
                 <b-datetimepicker
-                    v-model="startTime"
+                    v-model="searchAtt.date.gte"
                     rounded
                     placeholder="Start Time"
                     icon="calendar-today"
-                    :icon-right="startTime ? 'close-circle' : ''"
+                    :icon-right="searchAtt.date.gte ? 'close-circle' : ''"
                     icon-right-clickable
                     @icon-right-click="clearStartTime"
-                    horizontal-time-picker>
+                    horizontal-time-picker
+                    @input="validateDates">
                 </b-datetimepicker>
                 <b-datetimepicker
-                    v-model="endTime"
+                    v-model="searchAtt.date.lte"
                     rounded
                     placeholder="End Time"
                     icon="calendar-today"
-                    :icon-right="endTime ? 'close-circle' : ''"
+                    :icon-right="searchAtt.date.lte ? 'close-circle' : ''"
                     icon-right-clickable
                     @icon-right-click="clearEndTime"
-                    horizontal-time-picker>
+                    horizontal-time-picker
+                    @input="validateDates">
                 </b-datetimepicker>
               </b-field>
+              <p :style="{ color:  'red'}" v-if="isInvalidDateRange">结束时间必须大于开始时间</p>
             </div>
-            <b-field label="输入标签">
+            <b-field label="标签">
               <b-taginput
                   v-model="labelTexts"
                   :maxtags="10"
@@ -73,7 +93,7 @@
               </b-taginput>
             </b-field>
             <b-field>
-              <b-button type="is-primary" outlined>
+              <b-button type="is-primary" outlined @click="test">
                 筛选
               </b-button>
             </b-field>
@@ -83,7 +103,7 @@
       <!-- 如下部分为搜索框 -->
       <div class="search-container">
         <b-field class="autocompleteWidth">
-          <b-autocomplete rounded v-model="searchName"
+          <b-autocomplete rounded v-model="searchAtt.search.content"
                           :data="filteredDataArray"
                           placeholder="请输入搜索内容"
                           icon="magnify"
@@ -109,6 +129,7 @@
                     icon-left="plus"
           ></b-button>
         </router-link>
+
       </b-tooltip>
 
       <b-tooltip label="Delete selected" class="delete-selected" type="is-danger">
@@ -223,45 +244,46 @@
 <script>
 
 import axios from "axios";
-import {getArticles,deleteArticle,deleteArticles,getKeywords} from "@/api/articles";
+import Vue from 'vue'
+import {getArticles,deleteArticle,deleteArticles,getKeywords,searchArticles} from "@/api/articles";
 
-const searchData = []
+const searchData = [];
 //表格数据:包括id,用户信息,日期,性别
-const tableData =[]
+const tableData =[];
 // const tableData = require('@/data/sample.json')
-let searchAtt = {
-  "query": {
-    "match": {"content": "我叫丁真"},
-    "term": {"title": "烟distance", "author": "硫克克硫"},
-    "range": {
-      "date": {
-        "gt": "2020-10-10",
-        "lt": "2025-01-01"
-      }
-    }
-  }
-};
+
 export default {
   data() {
     return {
       searchData,
       tableData,
-      searchName: '',
+      // searchName: '',
       name:'',
       selected: null,
-      searchMode:false,
-      custom:'',
-      sizes: '',
-      labelTexts: ['Points', 'Total reviews'],
-      score: false,
-      checkboxGroup: ['Flint'],
+      // searchMode:false,
+      // checkboxGroup: ['Flint'],
       defaultOpenedDetails: [1],
       showDetailIcon: true,
       useTransition: false,
       searchStatus: false,
       checkedRows : [],
-      startTime: null,
-      endTime: null,
+      // startTime: null,
+      // endTime: null,
+      isInvalidDateRange: false,
+      searchAtt :{
+        "search":{
+          "content": "",
+          "mode": 0,
+          "fields":["title","content"]
+        },
+        "author": "",
+        "date": {
+            "gte": "",
+            "lte": "",
+        },
+      },
+      labelTexts: ['标签1', '标签2'],
+      score: true, //控制labelTexts可用与否，目前不可用
     }
   },
   computed: {
@@ -270,7 +292,7 @@ export default {
         return option
             .toString()
             .toLowerCase()
-            .indexOf(this.searchName.toLowerCase()) >= 0
+            .indexOf(this.searchAtt.search.content.toLowerCase()) >= 0
       })
     },
     transitionName() {
@@ -282,17 +304,24 @@ export default {
       if(!this.searchStatus) {
         return this.tableData
       }
-      if(this.searchName === '') {
+      if(this.searchAtt.search.content === '') {
         return this.tableData
       }
-      const searchTerm = this.searchName.toLowerCase()
+      const searchTerm = this.searchAtt.search.content.toLowerCase()
       this.searchStatus = false
       return this.tableData.filter(item => {
         return item.title.toLowerCase().includes(searchTerm) ||
             item.source.toLowerCase().includes(searchTerm) ||
             item.labels.some(label => label.toLowerCase().includes(searchTerm))
       })
-    }
+    },
+    validateDates() {
+      if (this.searchAtt.date.gte && this.searchAtt.date.lte) {
+        this.isInvalidDateRange = this.searchAtt.date.gte >= this.searchAtt.date.lte;
+      } else {
+        this.isInvalidDateRange = false;
+      }
+    },
   },
   methods: {
     editItem(id) {
@@ -321,19 +350,38 @@ export default {
         this.searchData = res.data
       })
     },
-    performSearch() {
+    dateWarning() {
+      this.$buefy.snackbar.open({
+        message: '日期选择有误，请重试！',
+        type: 'is-warning',
+        position: 'is-top',
+        actionText: '重试',
+        indefinite: true,
+      })
+    },
+    test(){
+      if(this.isInvalidDateRange === true){
+        this.dateWarning()
+        return
+      }      
+      alert(JSON.stringify(this.searchAtt));
+
+    },
+    performSearch(page = 0, size = 10, search = this.searchAtt) {
+      // alert(JSON.stringify(this.searchAtt));
+
+      if(this.isInvalidDateRange === true){
+        this.dateWarning()
+        return
+      }    
+
       this.searchStatus = true
-      console.log(this.searchName)
-      if(this.searchMode) {
-        searchAtt.query.match.content = this.searchName
-      } else {
-        searchAtt.query.match.content = this.searchName
-      }
-      searchAtt.query.match.content = this.searchName
-      searchAtt.query.range.date.gt = this.startTime
-      searchAtt.query.range.date.lt = this.endTime
+      console.log(JSON.stringify(this.searchAtt))
 
-
+      searchArticles(page, size, search).then(res => {
+        this.getTableData()
+      })
+   
     },
     deleteSelected() {
       // 使用id删除
@@ -346,31 +394,31 @@ export default {
     },
     pageChanged(pageNumber) {
       console.log(pageNumber)
-      console.log(this.searchMode)
+      console.log(this.searchAtt.search.mode)
       this.getTableData(pageNumber-1)
     },
     clearStartTime () {
-      this.startTime = null
+      this.searchAtt.date.gte = ""
     },
     clearEndTime () {
-      this.endTime = null
+      this.searchAtt.date.lte = ""
     },
-    //实现筛选功能
-    filterData() {
-      var query = {
-        "range": {
-          "date": {
-            "gt": "2022-01-01",
-            "lt": "2024-01-01"
-          }
-        },
-        "contains": {
-          "labels":labelTexts
-        },
+    // //实现筛选功能
+    // filterData() {
+    //   var query = {
+    //     "range": {
+    //       "date": {
+    //         "gt": "2022-01-01",
+    //         "lt": "2024-01-01"
+    //       }
+    //     },
+    //     "contains": {
+    //       "labels":labelTexts
+    //     },
 
 
-      }
-    }
+    //   }
+    // }
 
   },
   created() {
