@@ -93,7 +93,7 @@
               </b-taginput>
             </b-field>
             <b-field>
-              <b-button type="is-primary" outlined @click="test">
+              <b-button type="is-primary" outlined @click="performSearch">
                 筛选
               </b-button>
             </b-field>
