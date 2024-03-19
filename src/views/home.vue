@@ -248,9 +248,7 @@ import Vue from 'vue'
 import {getArticles,deleteArticle,deleteArticles,getKeywords,searchArticles} from "@/api/articles";
 
 const searchData = [];
-//表格数据:包括id,用户信息,日期,性别
 const tableData =[];
-// const tableData = require('@/data/sample.json')
 
 export default {
   data() {
@@ -379,7 +377,8 @@ export default {
       console.log(JSON.stringify(this.searchAtta))
 
       searchArticles(page, size, search).then(res => {
-        this.getTableData()
+        // console.log(res)
+        this.tableData = res.data
       })
    
     },
