@@ -8,6 +8,7 @@
       <h2 class="title">{{ title }}</h2>
       <p class="author">Author: {{ author }}</p>
       <p class="date">Date: {{ date }}</p>
+      <p class="labels" v-if="labels.length > 0">Labels: {{ labels.map(label => label).join(', ') }}</p>
       <div class="content" style="white-space: pre-line;">{{ content }}</div>
 
       <button class="edit-button" @click="editNews">
@@ -29,8 +30,7 @@ import {getArticle} from "@/api/articles";
         content: '',
         author: '',
         date: null,
-        // labels: ['科技', '体育', '娱乐', '财经', '其他'],
-        // selectedLabels: [],
+        labels: [],
       };
     },
     methods:{
@@ -50,7 +50,7 @@ import {getArticle} from "@/api/articles";
                 var date = res.data.date;
                 this.date = new Date(date);
                 this.id = res.data.id;
-                // this.selectedLabels = res.data.labels;
+                this.labels = res.data.labels;
               });
           } catch (error) {
               console.error(error);
@@ -82,7 +82,8 @@ import {getArticle} from "@/api/articles";
   }
   
   .author,
-  .date {
+  .date,
+  .labels{
     margin-bottom: 5px;
     font-size: 14px;
     color: #888;

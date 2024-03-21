@@ -22,7 +22,7 @@
       <b-collapse :open="false" aria-id="contentIdForA11y1">
         <template #trigger="props">
           <b-button label="筛选" type="is-primary" aria-controls="contentIdForA11y1" class="button-margin" rounded
-                    :aria-expanded="props.open" />
+                    :aria-expanded="props.open"/>
         </template>
         <!-- 下面是是筛选框的内容 -->
         <!--   TODO:搜索框内部或者右边加个搜索按钮     -->
@@ -87,9 +87,11 @@
             </div>
             <b-field label="标签">
               <b-taginput
-                  v-model="labelTexts"
-                  :maxtags="10"
-                  :disabled="score">
+                  v-model="searchAtt.labels"
+                  ellipsis
+                  icon="label"
+                  @input="handleTagInput"
+                  :maxtags="10">
               </b-taginput>
             </b-field>
             <b-field>
@@ -269,19 +271,18 @@ export default {
       // endTime: null,
       isInvalidDateRange: false,
       searchAtt :{
-        "search":{
-          "content": "",
-          "mode": 0,
-          "fields":["title","content"]
+        search:{
+          content: "",
+          mode: 0,
+          fields: ["title","content"]
         },
-        "author": "",
-        "date": {
+        author: "",
+        date: {
             "gte": null,
             "lte": null,
         },
+        labels: [],
       },
-      labelTexts: ['标签1', '标签2'],
-      score: true, //控制labelTexts可用与否，目前不可用
     }
   },
   computed: {
@@ -365,9 +366,11 @@ export default {
       alert(JSON.stringify(this.searchAtt));
 
     },
+    handleTagInput(updatedTags) {
+      this.searchAtt.labels = updatedTags;
+    },
     performSearch(page = 0, size = 10, search = this.searchAtt) {
       // alert(JSON.stringify(this.searchAtt));
-
       if(this.isInvalidDateRange === true){
         this.dateWarning()
         return
@@ -377,7 +380,7 @@ export default {
       console.log(JSON.stringify(this.searchAtta))
 
       searchArticles(page, size, search).then(res => {
-        // console.log(res)
+        console.log(res)
         this.tableData = res.data
       })
    
@@ -402,23 +405,6 @@ export default {
     clearEndTime () {
       this.searchAtt.date.lte = null
     },
-    // //实现筛选功能
-    // filterData() {
-    //   var query = {
-    //     "range": {
-    //       "date": {
-    //         "gt": "2022-01-01",
-    //         "lt": "2024-01-01"
-    //       }
-    //     },
-    //     "contains": {
-    //       "labels":labelTexts
-    //     },
-
-
-    //   }
-    // }
-
   },
   created() {
     this.getTableData()
