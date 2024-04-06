@@ -10,7 +10,6 @@ stages:
 build:
   stage: build
   before_script:
-    - whoami
     - echo $PATH
     - pwd
     - whereis docker
