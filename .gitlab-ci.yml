@@ -11,6 +11,7 @@ build:
   stage: build
   before_script:
     - echo $PATH
+    - whereis docker
     - which docker || echo "Docker not found in PATH"
   script:
     - echo "Building the image..."
