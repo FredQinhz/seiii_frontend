@@ -1,18 +1,4 @@
-/**
-* Component for displaying a selection with filtering options.
-*
-* @component TestPage
-* @description This component renders a selection with filtering options. It includes a collapse section with a button trigger and a content area for filtering options such as checkboxes, radio buttons, and input fields. It also includes a search container with an autocomplete input field for filtering the selection options.
-*
-* @props {Array} data - The array of options for the selection.
-* @props {String} name - The value of the selected option.
-* @props {String} selected - The currently selected option.
-*
-* @computed filteredDataArray - A computed property that filters the data array based on the entered search query.
-*
-* @example
-* <TestPage :data="['Angular', 'Angular 2', 'Aurelia', 'Backbone', 'Ember', 'jQuery', 'Meteor', 'Node.js', 'Polymer', 'React', 'RxJS', 'Vue.js']" :name="name" :selected="selected" />
-*/
+
 <template>
 
   <div>
@@ -42,12 +28,12 @@
                     native-value="content" required>
                     <span>内容</span>
                   </b-checkbox-button>
-                   
+
                 </b-field>
                 <b-field grouped group-multiline label="匹配模式">
                   <b-radio v-model.number="searchAtt.search.mode" native-value="0">
                     模糊匹配
-                  </b-radio>  
+                  </b-radio>
                   <b-radio v-model.number="searchAtt.search.mode" native-value="1">
                     严格匹配
                   </b-radio>
@@ -167,7 +153,7 @@
         <!--  下面是图表项      -->
         <b-table-column field="id" label="ID" width="40" numeric sortable v-slot="props">
           {{ props.row.id }}
-          
+
         </b-table-column>
 
         <!-- <b-table-column field="title" label="Title" sortable v-slot="props">
@@ -190,19 +176,6 @@
                     {{ new Date(props.row.date).toLocaleDateString() }}
                 </span>
         </b-table-column>
-
-        <!--        <b-table-column label="Labels" v-slot="props">-->
-        <!--          <b-tag-->
-        <!--              v-for="(label, index) in props.row.labels"-->
-        <!--              :key="index"-->
-        <!--              v-if="index < 2"-->
-        <!--              type="is-info"-->
-        <!--              class="tag-spacing"-->
-        <!--          >-->
-        <!--            {{ label }}-->
-        <!--          </b-tag>-->
-        <!--        </b-table-column>-->
-
         <b-table-column v-slot="props">
           <b-tooltip label="Edit">
             <b-button class="row-button" size="is-middle" icon-right="pencil" @click="editItem(props.row.id)"></b-button>
@@ -299,21 +272,6 @@ export default {
         return 'fade'
       }
     },
-    fliteredData() {
-      if(!this.searchStatus) {
-        return this.tableData
-      }
-      if(this.searchAtt.search.content === '') {
-        return this.tableData
-      }
-      const searchTerm = this.searchAtt.search.content.toLowerCase()
-      this.searchStatus = false
-      return this.tableData.filter(item => {
-        return item.title.toLowerCase().includes(searchTerm) ||
-            item.source.toLowerCase().includes(searchTerm) ||
-            item.labels.some(label => label.toLowerCase().includes(searchTerm))
-      })
-    },
     validateDates() {
       if (this.searchAtt.date.gte && this.searchAtt.date.lte) {
         this.isInvalidDateRange = this.searchAtt.date.gte >= this.searchAtt.date.lte;
@@ -362,7 +320,7 @@ export default {
       if(this.isInvalidDateRange === true){
         this.dateWarning()
         return
-      }      
+      }
       alert(JSON.stringify(this.searchAtt));
 
     },
@@ -374,7 +332,7 @@ export default {
       if(this.isInvalidDateRange === true){
         this.dateWarning()
         return
-      }    
+      }
 
       this.searchStatus = true
       console.log(JSON.stringify(this.searchAtta))
@@ -383,7 +341,7 @@ export default {
         console.log(res)
         this.tableData = res.data
       })
-   
+
     },
     deleteSelected() {
       // 使用id删除
