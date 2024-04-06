@@ -10,6 +10,7 @@ stages:
 build:
   stage: build
   before_script:
+    - pwd
     - echo $PATH
     - whereis docker
     - which docker || echo "Docker not found in PATH"
