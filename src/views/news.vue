@@ -57,6 +57,7 @@ import {getArticle} from "@/api/articles";
           }
       },
     },
+    
     created() {
         const id = this.$route.params.id;
         this.fetchItems(id);
