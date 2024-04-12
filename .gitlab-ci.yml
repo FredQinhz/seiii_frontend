@@ -5,12 +5,10 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    # - docker build -t demo/front .
-    # - docker save demo/front -o demo.tar
-    # - docker rmi demo/front
-    - echo "Building the image..."
-    - pwd
-    - ls
+    - docker build -t demo/front .
+    - docker save demo/front -o demo.tar
+    - docker rmi demo/front
+    # - echo "Building the image..."
   artifacts:
     untracked: true
 
@@ -20,9 +18,9 @@ deploy-job:      # This job runs in the deploy stage.
   environment: production
 
   script:
-    # - docker container rm -f demo || true  # 如果容器存在，先移除，忽略移除失败的情况
-    # - docker load -i demo.tar  # 加载本地的 Docker 镜像
-    # - docker run -d --name demo -p 8081:8081 demo/front # 启动 Docker 容器{APP_SERVER_PWD}" 
-    - echo "Deploying the image..."
+    - docker container rm -f demo || true  # 如果容器存在，先移除，忽略移除失败的情况
+    - docker load -i demo.tar  # 加载本地的 Docker 镜像
+    - docker run -d --name demo -p 8081:8081 demo/front # 启动 Docker 容器{APP_SERVER_PWD}" 
+    # - echo "Deploying the image..."
   only:
     - main
