@@ -364,6 +364,7 @@ export default {
       this.searchAtt.date.lte = null
     },
   },
+  
   created() {
     this.getTableData()
     this.getSearchData()
