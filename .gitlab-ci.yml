@@ -18,6 +18,8 @@ build-job:       # This job runs in the build stage, which runs first.
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
+  dependencies:
+    - build-job  # Specify that deploy-job depends on build-job
 
   script:
     # - docker container rm -f demo || true  # 如果容器存在，先移除，忽略移除失败的情况
