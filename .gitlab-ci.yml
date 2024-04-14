@@ -5,16 +5,12 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    # - docker build -t demo/front .
-    # - docker save demo/front -o demo.tar
-    # - docker rmi demo/front
     - echo "Building the image..."
-    - echo "Twy531899189" | sudo -S bash -c 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -'
-    - echo "Twy531899189" | sudo -S bash -c 'apt install nodejs npm'
-    - node -v
-    - npm -v
-    - npm install --registry=https://registry.npm.taobao.org
-    - npm run build
+    - docker build -t demo/front .
+    - docker save demo/front -o demo.tar
+    - docker rmi demo/front
+    # - npm install --registry=https://registry.npm.taobao.org
+    # - npm run build
   artifacts:
     untracked: true
 
@@ -24,10 +20,10 @@ deploy-job:      # This job runs in the deploy stage.
   environment: production
   
   script:
-    # - docker container rm -f demo || true  # 如果容器存在，先移除，忽略移除失败的情况
-    # - docker load -i demo.tar  # 加载本地的 Docker 镜像
-    # - docker run -d --name demo -p 8081:8081 demo/front # 启动 Docker 容器{APP_SERVER_PWD}" 
     - echo "Deploying the image..."
-    - npm run serve
+    - docker container rm -f demo || true  # 如果容器存在，先移除，忽略移除失败的情况
+    - docker load -i demo.tar  # 加载本地的 Docker 镜像
+    - docker run -d --name demo -p 8081:8081 demo/front # 启动 Docker 容器{APP_SERVER_PWD}" 
+    # - npm run serve
   only:
     - main
