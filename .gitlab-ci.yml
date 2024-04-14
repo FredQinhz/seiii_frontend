@@ -9,7 +9,8 @@ build-job:       # This job runs in the build stage, which runs first.
     # - docker save demo/front -o demo.tar
     # - docker rmi demo/front
     - echo "Building the image..."
-    - apt install nodejs npm
+    - echo "Twy531899189" | sudo -S bash -c 'curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -'
+    - echo "Twy531899189" | sudo -S bash -c 'apt install nodejs npm'
     - node -v
     - npm -v
     - npm install --registry=https://registry.npm.taobao.org
