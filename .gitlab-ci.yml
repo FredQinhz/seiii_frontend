@@ -9,9 +9,7 @@ build-job:       # This job runs in the build stage, which runs first.
     # - docker save demo/front -o demo.tar
     # - docker rmi demo/front
     - echo "Building the image..."
-    - curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    - sudo apt-get install -y nodejs
-    - sudo npm install -g npm@latest
+    - apt install nodejs npm
     - node -v
     - npm -v
     - npm install --registry=https://registry.npm.taobao.org
